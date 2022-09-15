@@ -12,8 +12,14 @@ import java.util.UUID;
 @Service
 public class AccountService {
 
+    /**
+     * repository for the database-connection
+     */
     private final AccountRepository accountRepository;
 
+    /**
+     * contains tuples that map a token to a specific user
+     */
     private final HashMap<String, String> tokens = new HashMap<String, String>();
 
     @Autowired

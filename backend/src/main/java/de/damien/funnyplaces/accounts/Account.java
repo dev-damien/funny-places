@@ -19,4 +19,11 @@ public class Account {
     private String name;
     private String password;
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

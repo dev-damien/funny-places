@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.AuthenticationException;
+import javax.persistence.EntityExistsException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -19,20 +20,21 @@ public class AccountController {
     }
 
     @PostMapping("/signup")
-    public String createAccount(@RequestBody Account account) {
-        String res = accountService.createAccount(account);
-        if (res == null)
+    public String createAccount(@RequestBody Account account) throws ResponseStatusException {
+        try {
+            return accountService.createAccount(account);
+        } catch (EntityExistsException ex) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
-        return res;
-
+        }
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Account account) {
-        String res = accountService.login(account);
-        if (res == null)
+    public String login(@RequestBody Account account) throws ResponseStatusException {
+        try {
+            return accountService.login(account);
+        } catch (AuthenticationException ex) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        return res;
+        }
     }
 
     @PostMapping("/logout")

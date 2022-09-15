@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import javax.persistence.EntityExistsException;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,56 +23,66 @@ public class AccountService {
 
 
     /**
-     *
-     * @param   account the account details
-     * @return  the name of the created account if successful,
-     *          null otherwise
+     * @param account the account details
+     * @return the name of the created account if successful,
+     *         null otherwise
+     * @throws EntityExistsException if user(name) already exists
      */
     public String createAccount(Account account) {
-        if (getAccountByName(account.getName()) != null){
-            System.out.println("Account with name " + account.getName() + " already exists");
-            return null;
+        System.out.println("SIGNUP: received data " + account);
+        if (getAccountByName(account.getName()) != null) {
+            System.out.println("SIGNUP: Account already exists");
+            throw new EntityExistsException();
         }
         accountRepository.save(account);
-        System.out.println("Account has been created: " + account.getName());
+        System.out.println("SIGNUP: Account has been created successfully");
         return account.getName();
     }
 
     /**
-     *
-     * @param   account the credentials of the login try
-     * @return  auth-token if login was successful,
-     *          null otherwise
+     * @param account the credentials of the login try
+     * @return auth-token if login was successful,
+     *         null otherwise
+     * @throws AuthenticationException if user does not exist or password is wrong
      */
-    public String login(Account account) {
+    public String login(Account account) throws AuthenticationException {
+        System.out.println("LOGIN: received data " + account);
         Account existing = getAccountByName(account.getName());
         if (existing == null) {
             //account does not exist
-            return null;
+            System.out.println("LOGIN: Account does not exist");
+            throw new AuthenticationException();
         }
-        if (account.getPassword().equals(existing.getPassword())){
+        if (account.getPassword().equals(existing.getPassword())) {
             //login correct
             String token = generateNewToken();
             tokens.put(token, account.getName());
+            System.out.println("LOGIN: Account logged in successfully. Token=" + token);
             return token;
         }
         //wrong password
-        return null;
+        System.out.println("LOGIN: Account used wrong password for login");
+        throw new AuthenticationException();
     }
 
     /**
      * @param token the token to authenticate the user
      * @return true, if logout was successful
-     * false otherwise
+     *         false otherwise
+     * @throws AuthenticationException if token is invalid
      */
     public String logout(String token) throws AuthenticationException {
+        System.out.println("LOGOUT: with token " + token);
         String res = tokens.remove(token);
-        if (res == null) throw new AuthenticationException();
+        if (res == null) {
+            System.out.println("LOGOUT: has been denied. Wrong token used");
+            throw new AuthenticationException();
+        }
+        System.out.println("LOGOUT: User " + res + " has been logged out successfully");
         return res;
     }
 
     /**
-     *
      * @param name the name of the account
      * @return the account matching the name
      */
@@ -81,10 +92,9 @@ public class AccountService {
     }
 
     /**
-     *
-     * @return  a new token with 32 characters
+     * @return a new token with 32 characters
      */
-    private String generateNewToken(){
+    private String generateNewToken() {
         String token;
         do {
             token = UUID.randomUUID().toString();

@@ -100,6 +100,7 @@ public class AccountService {
             token = UUID.randomUUID().toString();
         }
         while (tokens.containsKey(token));
+        token = token.replaceAll("-", "");
         return token;
     }
 

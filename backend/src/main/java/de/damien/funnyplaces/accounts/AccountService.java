@@ -55,6 +55,11 @@ public class AccountService {
         }
         if (account.getPassword().equals(existing.getPassword())) {
             //login correct
+            if (tokens.containsValue(account.getName())) {
+                //user already logged in
+                System.out.println("LOGIN: Logged in account tried to log in again");
+                throw new AuthenticationException();
+            }
             String token = generateNewToken();
             tokens.put(token, account.getName());
             System.out.println("LOGIN: Account logged in successfully. Token=" + token);

@@ -1,9 +1,9 @@
 package de.damien.funnyplaces.accounts;
 
-import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
@@ -60,14 +60,14 @@ public class AccountService {
     }
 
     /**
-     *
-     * @param   token the token to authenticate the user
-     * @return  true, if logout was successful
-     *          false otherwise
+     * @param token the token to authenticate the user
+     * @return true, if logout was successful
+     * false otherwise
      */
-    public boolean logout(String token){
+    public String logout(String token) throws AuthenticationException {
         String res = tokens.remove(token);
-        return res != null;
+        if (res == null) throw new AuthenticationException();
+        return res;
     }
 
     /**

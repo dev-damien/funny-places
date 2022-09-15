@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.naming.AuthenticationException;
+
 @RestController
-@RequestMapping("/api/v1/accounts")
+@RequestMapping("/api/v1")
 public class AccountController {
 
     private final AccountService accountService;
@@ -16,7 +18,7 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public String createAccount(@RequestBody Account account) {
         String res = accountService.createAccount(account);
         if (res == null)
@@ -25,13 +27,21 @@ public class AccountController {
 
     }
 
-    @GetMapping
-    private String login(@RequestBody Account account) {
+    @PostMapping("/login")
+    public String login(@RequestBody Account account) {
         String res = accountService.login(account);
         if (res == null)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         return res;
     }
 
+    @PostMapping("/logout")
+    public String logout(@PathVariable String token) throws ResponseStatusException {
+        try {
+            return accountService.logout(token);
+        } catch (AuthenticationException ex) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
 
 }

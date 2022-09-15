@@ -3,8 +3,6 @@ package de.damien.funnyplaces.accounts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -19,7 +17,7 @@ public class AccountController {
     }
 
     @PostMapping
-    public String createAccount(@RequestBody Account account){
+    public String createAccount(@RequestBody Account account) {
         String res = accountService.createAccount(account);
         if (res == null)
             throw new ResponseStatusException(HttpStatus.CONFLICT);
@@ -28,11 +26,11 @@ public class AccountController {
     }
 
     @GetMapping
-    private boolean checkCredentials(@RequestBody Account account) {
-        boolean res = accountService.checkCredentials(account);
-        if (!res)
+    private String login(@RequestBody Account account) {
+        String res = accountService.login(account);
+        if (res == null)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        return true;
+        return res;
     }
 
 

@@ -20,7 +20,7 @@ public class AccountService {
     /**
      * contains tuples that map a token to a specific user
      */
-    private final HashMap<String, String> tokens = new HashMap<String, String>();
+    private static final HashMap<String, String> tokens = new HashMap<String, String>();
 
     @Autowired
     public AccountService(AccountRepository accountRepository) {
@@ -113,6 +113,26 @@ public class AccountService {
         while (tokens.containsKey(token));
         token = token.replaceAll("-", "");
         return token;
+    }
+
+
+    /**
+     * @param token the token of the user
+     * @return the user mapped to that token
+     *         or null if no user is mapped
+     */
+    public static String getAccountByToken(String token) {
+        return tokens.get(token);
+    }
+
+    /**
+     * @param userName name of the user to authenticate
+     * @param token    token of the user
+     * @return true if user is logged in (token maps to the username)
+     *         false otherwise
+     */
+    public static boolean authenticateUser(String userName, String token) {
+        return getAccountByToken(token).equals(userName);
     }
 
 }

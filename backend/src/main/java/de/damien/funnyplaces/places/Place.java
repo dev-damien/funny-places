@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -27,7 +27,7 @@ public class Place {
             strategy = GenerationType.SEQUENCE,
             generator = "place_sequence"
     )
-    private Long id;
+    private Long placeId;
     private String title;
     private String description;
     @ManyToOne()
@@ -44,6 +44,6 @@ public class Place {
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.MERGE)
     @JsonIgnoreProperties(value = {"text", "writer", "place"})
-    private Set<Comment> comments;
+    private List<Comment> comments;
 
 }

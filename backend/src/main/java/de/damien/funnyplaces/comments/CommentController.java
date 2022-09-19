@@ -7,7 +7,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.AuthenticationException;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -23,7 +22,7 @@ public class CommentController {
     @PostMapping(path = "/comments")
     public Long addComment(@RequestBody Comment comment, String token) {
         try {
-            return commentService.addComment(comment, token).getId();
+            return commentService.addComment(comment, token).getCommentId();
         } catch (AuthenticationException ex) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
@@ -36,11 +35,6 @@ public class CommentController {
         } catch (NoSuchElementException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-    }
-
-    @GetMapping(path = "/error/places/{placeId}/comments")
-    public Set<Comment> getAllCommentsByPlaceId(@PathVariable("placeId") Long placeId) {
-        return commentService.getAllCommentsByPlaceId(placeId);
     }
 
 }

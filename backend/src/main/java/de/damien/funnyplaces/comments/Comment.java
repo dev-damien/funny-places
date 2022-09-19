@@ -25,7 +25,7 @@ public class Comment {
             strategy = GenerationType.SEQUENCE,
             generator = "comment_sequence"
     )
-    private Long id;
+    private Long commentId;
     private String text;
     @ManyToOne
     @JoinColumn(name = "name", nullable = false)

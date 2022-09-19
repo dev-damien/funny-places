@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import javax.naming.AuthenticationException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CommentService {
@@ -36,7 +35,4 @@ public class CommentService {
         return commentOptional.get();
     }
 
-    public Set<Comment> getAllCommentsByPlaceId(Long placeId) {
-        return commentRepository.findByPlaceId(placeId);
-    }
 }

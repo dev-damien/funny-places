@@ -27,7 +27,7 @@ public class Image {
             strategy = GenerationType.SEQUENCE,
             generator = "image_sequence"
     )
-    private Long id;
+    private Long imageId;
     private String name;
     private String type;
     @OneToOne(mappedBy = "image")

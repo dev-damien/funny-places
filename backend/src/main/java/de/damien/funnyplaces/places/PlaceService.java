@@ -4,9 +4,9 @@ import de.damien.funnyplaces.comments.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class PlaceService {
@@ -24,14 +24,14 @@ public class PlaceService {
 
 
     public Place getPlace(Long id) throws NoSuchElementException {
-        Optional<Place> placeOptional = placeRepository.findPlaceById(id);
+        Optional<Place> placeOptional = placeRepository.findById(id);
         if (placeOptional.isEmpty()) {
             throw new NoSuchElementException();
         }
         return placeOptional.get();
     }
 
-    public Set<Comment> getAllComments(Long id) {
-        return placeRepository.findPlaceById(id).get().getComments();
+    public List<Comment> getAllComments(Long id) {
+        return placeRepository.findById(id).get().getComments();
     }
 }

@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/places")
@@ -47,10 +47,10 @@ public class PlaceController {
         return null;
     }
 
-    @GetMapping(path = "/{id}/comments")
-    public Set<Comment> getAllComments(@PathVariable("id") Long id) {
+    @GetMapping(path = "/{placeId}/comments")
+    public List<Comment> getAllComments(@PathVariable("placeId") Long placeId) {
         try {
-            Set<Comment> comments = placeService.getAllComments(id);
+            List<Comment> comments = placeService.getAllComments(placeId);
             return comments;
         } catch (NoSuchElementException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);

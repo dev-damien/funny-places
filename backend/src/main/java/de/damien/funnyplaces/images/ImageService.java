@@ -25,7 +25,7 @@ public class ImageService {
                 .type(file.getContentType())
                 .imageData(ImageUtils.compressImage(file.getBytes()))
                 .build());
-        return image.getId();
+        return image.getImageId();
     }
 
     public byte[] downloadImage(Long fileId) throws NoSuchFileException {

@@ -1,9 +1,11 @@
 package de.damien.funnyplaces.images;
 
+import de.damien.funnyplaces.places.Place;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -27,8 +29,12 @@ public class Image {
     private Long id;
     private String name;
     private String type;
+    @OneToOne(mappedBy = "image")
+    private Place place;
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     @Column(length = 1024)
     private byte[] imageData;
+
 
 }

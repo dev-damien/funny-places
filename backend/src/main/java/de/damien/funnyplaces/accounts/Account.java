@@ -1,6 +1,7 @@
 package de.damien.funnyplaces.accounts;
 
 import de.damien.funnyplaces.comments.Comment;
+import de.damien.funnyplaces.places.Place;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,8 @@ public class Account {
     @Id
     private String name;
     private String password;
+    @OneToMany(mappedBy = "creator")
+    private Set<Place> createdPlaces;
 
     @OneToMany(mappedBy = "writer")
     private Set<Comment> comments;

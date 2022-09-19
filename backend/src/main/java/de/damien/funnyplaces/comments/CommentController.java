@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/api/v1/comments")
 public class CommentController {
 
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @Autowired
     public CommentController(CommentService commentRepository) {
@@ -20,7 +20,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public Long addComment(Comment comment, String token) {
+    public Long addComment(@RequestBody Comment comment, String token) {
         try {
             return commentService.addComment(comment, token).getId();
         } catch (AuthenticationException ex) {

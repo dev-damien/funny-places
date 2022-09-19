@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,10 +27,12 @@ public class Comment {
     )
     private Long id;
     private String text;
-    @JsonIgnoreProperties("password")
     @ManyToOne
     @JoinColumn(name = "name", nullable = false)
+    @JsonIgnoreProperties("password")
     private Account writer;
-    private Place place;
 
+    @ManyToOne
+    @JoinColumn(name = "place_id", nullable = false)
+    private Place place;
 }

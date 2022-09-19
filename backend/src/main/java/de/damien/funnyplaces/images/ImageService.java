@@ -12,20 +12,20 @@ import java.util.Optional;
 @Service
 public class ImageService {
 
-    private ImageRepository imageRepository;
+    private final ImageRepository imageRepository;
 
     @Autowired
     public ImageService(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }
 
-    public String uploadImage(MultipartFile file) throws IOException {
+    public Long uploadImage(MultipartFile file) throws IOException {
         Image image = imageRepository.save(Image.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
                 .imageData(ImageUtils.compressImage(file.getBytes()))
                 .build());
-        return image.getName();
+        return image.getId();
     }
 
     public byte[] downloadImage(Long fileId) throws NoSuchFileException {

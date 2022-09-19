@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class CommentService {
 
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
     public CommentService(CommentRepository commentRepository) {

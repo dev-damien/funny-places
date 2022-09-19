@@ -29,10 +29,12 @@ public class Comment {
     private String text;
     @ManyToOne
     @JoinColumn(name = "name", nullable = false)
-    @JsonIgnoreProperties("password")
+    @JsonIgnoreProperties(value = {"password", "createdPlaces", "comments"})
     private Account writer;
 
     @ManyToOne
     @JoinColumn(name = "place_id", nullable = false)
+    @JsonIgnoreProperties(value = {"title", "description",
+            "creator", "latitude", "longitude", "image", "comments"})
     private Place place;
 }

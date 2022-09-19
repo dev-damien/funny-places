@@ -1,5 +1,6 @@
 package de.damien.funnyplaces.images;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import de.damien.funnyplaces.places.Place;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,11 +31,12 @@ public class Image {
     private String name;
     private String type;
     @OneToOne(mappedBy = "image")
+    @JsonIgnoreProperties(value = {"title", "description",
+            "creator", "latitude", "longitude", "image", "comments"})
     private Place place;
     @Lob
     @Type(type = "org.hibernate.type.ImageType")
     @Column(length = 1024)
     private byte[] imageData;
-
 
 }

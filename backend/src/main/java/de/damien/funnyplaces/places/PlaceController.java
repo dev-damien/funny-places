@@ -1,11 +1,13 @@
 package de.damien.funnyplaces.places;
 
+import de.damien.funnyplaces.comments.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/places")
@@ -43,6 +45,16 @@ public class PlaceController {
     public Place deletePlace(@PathVariable("id") Long id) {
         //TODO
         return null;
+    }
+
+    @GetMapping(path = "/{id}/comments")
+    public Set<Comment> getAllComments(@PathVariable("id") Long id) {
+        try {
+            Set<Comment> comments = placeService.getAllComments(id);
+            return comments;
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

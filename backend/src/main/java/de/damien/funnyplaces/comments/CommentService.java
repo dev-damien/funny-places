@@ -1,12 +1,12 @@
 package de.damien.funnyplaces.comments;
 
-import de.damien.funnyplaces.accounts.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CommentService {
@@ -19,11 +19,12 @@ public class CommentService {
     }
 
     public Comment addComment(Comment comment, String token) throws AuthenticationException {
-        String userByToken = AccountService.getAccountByToken(token);
-        if (!AccountService.authenticateUser(comment.getWriter().getName(), token)) {
-            //token authentication failed
-            throw new AuthenticationException("");
-        }
+        //TODO uncomment later
+//        String userByToken = AccountService.getAccountByToken(token);
+//        if (!AccountService.authenticateUser(comment.getWriter().getName(), token)) {
+//            //token authentication failed
+//            throw new AuthenticationException("");
+//        }
         return commentRepository.save(comment);
     }
 
@@ -33,5 +34,9 @@ public class CommentService {
             throw new NoSuchElementException();
         }
         return commentOptional.get();
+    }
+
+    public Set<Comment> getAllCommentsByPlaceId(Long placeId) {
+        return commentRepository.findByPlaceId(placeId);
     }
 }

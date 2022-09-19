@@ -43,9 +43,7 @@ public class Place {
     private Image image;
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.MERGE)
-    @JsonIgnoreProperties(value = {
-            "place"
-    })
+    @JsonIgnoreProperties(value = {"text", "writer", "place"})
     private Set<Comment> comments;
 
 }

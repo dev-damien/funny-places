@@ -1,10 +1,12 @@
 package de.damien.funnyplaces.places;
 
+import de.damien.funnyplaces.comments.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PlaceService {
@@ -27,5 +29,9 @@ public class PlaceService {
             throw new NoSuchElementException();
         }
         return placeOptional.get();
+    }
+
+    public Set<Comment> getAllComments(Long id) {
+        return placeRepository.findPlaceById(id).get().getComments();
     }
 }

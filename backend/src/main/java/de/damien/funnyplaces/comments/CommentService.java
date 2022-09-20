@@ -35,4 +35,19 @@ public class CommentService {
         return commentOptional.get();
     }
 
+    public Comment updateComment(Long id, Comment commentNew) throws NoSuchElementException {
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+        if (commentOptional.isEmpty()) throw new NoSuchElementException();
+        Comment commentDB = commentOptional.get();
+        commentDB.setText(commentNew.getText());
+        return commentRepository.save(commentDB);
+    }
+
+    public Comment deleteComment(Long id) throws NoSuchElementException {
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+        if (commentOptional.isEmpty()) throw new NoSuchElementException();
+        Comment commentDB = commentOptional.get();
+        commentRepository.deleteById(id);
+        return commentDB;
+    }
 }

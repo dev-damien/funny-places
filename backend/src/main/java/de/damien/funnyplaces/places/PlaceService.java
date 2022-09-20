@@ -32,6 +32,27 @@ public class PlaceService {
     }
 
     public List<Comment> getAllComments(Long id) {
-        return placeRepository.findById(id).get().getComments();
+        Optional<Place> placeOptional = placeRepository.findById(id);
+        if (placeOptional.isEmpty()) throw new NoSuchElementException();
+        Place place = placeOptional.get();
+        return place.getComments();
+    }
+
+    public Place updatePlace(Long id, Place placeNew) throws NoSuchElementException {
+        Optional<Place> place = placeRepository.findById(id);
+        if (place.isEmpty()) throw new NoSuchElementException();
+        Place placeDB = place.get();
+        placeDB.setTitle(placeNew.getTitle());
+        placeDB.setDescription(placeNew.getDescription());
+        placeRepository.save(placeDB);
+        return place.get();
+    }
+
+    public Place deletePlace(Long id) throws NoSuchElementException {
+        Optional<Place> placeOptional = placeRepository.findById(id);
+        if (placeOptional.isEmpty()) throw new NoSuchElementException();
+        Place place = placeOptional.get();
+        placeRepository.deleteById(id);
+        return place;
     }
 }

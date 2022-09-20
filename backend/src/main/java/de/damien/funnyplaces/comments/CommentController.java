@@ -37,4 +37,21 @@ public class CommentController {
         }
     }
 
+    @PatchMapping(path = "/comments/{id}")
+    public Comment updateComment(@PathVariable("id") Long id, @RequestBody Comment commentNew) {
+        try {
+            return commentService.updateComment(id, commentNew);
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping(path = "/comments/{id}")
+    public Comment deleteComment(@PathVariable("id") Long id) {
+        try {
+            return commentService.deleteComment(id);
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
 }

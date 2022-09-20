@@ -36,15 +36,21 @@ public class PlaceController {
     }
 
     @PatchMapping(path = "/{id}")
-    public Place updatePlace(@PathVariable("id") Long id) {
-        //TODO
-        return null;
+    public Place updatePlace(@PathVariable("id") Long id, @RequestBody Place place) {
+        try {
+            return placeService.updatePlace(id, place);
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping(path = "/{id}")
     public Place deletePlace(@PathVariable("id") Long id) {
-        //TODO
-        return null;
+        try {
+            return placeService.deletePlace(id);
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping(path = "/{placeId}/comments")

@@ -1,5 +1,6 @@
 package de.damien.funnyplaces.accounts;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.damien.funnyplaces.comments.Comment;
 import de.damien.funnyplaces.places.Place;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class Account {
     private Set<Place> createdPlaces;
 
     @OneToMany(mappedBy = "writer")
+    @JsonIgnore
     private Set<Comment> comments;
 
     @Override

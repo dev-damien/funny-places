@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Frontend">
         <activity
-            android:name="de.damien.frontend.MainActivity"
+            android:name="de.damien.frontend.presentation.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Frontend.NoActionBar">

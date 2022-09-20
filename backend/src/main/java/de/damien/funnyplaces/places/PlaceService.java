@@ -68,4 +68,9 @@ public class PlaceService {
             commentRepository.deleteById(comment.getCommentId());
         }
     }
+
+    @Transactional
+    public List<Place> getAllPlaces() {
+        return placeRepository.findAll();
+    }
 }

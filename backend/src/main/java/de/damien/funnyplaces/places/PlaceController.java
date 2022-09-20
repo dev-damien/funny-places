@@ -35,6 +35,11 @@ public class PlaceController {
         }
     }
 
+    @GetMapping
+    public List<Place> getAllPlaces() {
+        return placeService.getAllPlaces();
+    }
+
     @PatchMapping(path = "/{id}")
     public Place updatePlace(@PathVariable("id") Long id, @RequestBody Place place) {
         try {

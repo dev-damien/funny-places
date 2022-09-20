@@ -7,6 +7,7 @@ import de.damien.funnyplaces.images.Image;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -44,6 +45,7 @@ public class Place {
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.MERGE)
     @JsonIgnoreProperties(value = {"text", "writer", "place"})
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private List<Comment> comments;
 
 }

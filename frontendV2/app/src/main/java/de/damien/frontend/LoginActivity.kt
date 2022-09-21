@@ -108,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
             Response.Listener { response ->
                 Toast.makeText(applicationContext, "Logged In Successfully", Toast.LENGTH_SHORT)
                     .show()
-                Log.i(Constants.TAG, response)
+                Log.i(Constants.TAG, "token received: $response")
                 AccountData.token = response;
             }, Response.ErrorListener { error ->
                 Toast.makeText(

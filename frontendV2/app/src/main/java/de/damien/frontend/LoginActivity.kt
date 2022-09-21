@@ -2,7 +2,9 @@ package de.damien.frontend
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
@@ -13,21 +15,31 @@ import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
-    private val name: String? = null
-    private val password: String? = null
-    private val token: String? = null
-
+    private lateinit var buSignup: Button
+    private lateinit var buLogin: Button
+    private lateinit var etName: EditText
+    private lateinit var etPassword: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        val buSignup = findViewById<Button>(R.id.buLoginSignup)
+
+        buSignup = findViewById<Button>(R.id.buLoginSignup)
+        buLogin = findViewById<Button>(R.id.buLoginLogin)
+        etName = findViewById<EditText>(R.id.etLoginName)
+        etPassword = findViewById<EditText>(R.id.etLoginPassword)
+
         buSignup.setOnClickListener {
             signup()
         }
+        buLogin.setOnClickListener {
+            login()
+        }
+
     }
 
-    private fun signup2() {
+    //TODO remove later
+    private fun referenceForLater() {
         val url = Constants.SERVER_URL + "/signup"
         val request: StringRequest = object : StringRequest(Method.POST, url,
             Response.Listener { response ->
@@ -42,15 +54,15 @@ class LoginActivity : AppCompatActivity() {
             }) {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["name"] = "Neo"
-                params["password"] = "redPill123"
+                params["name"] = etName.text.toString()
+                params["password"] = etPassword.text.toString()
                 return params
             }
 
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params: MutableMap<String, String> = HashMap()
-                params["Content-Type"] = "application/x-www-form-urlencoded"
+                params["Content-Type"] = "application/json"
                 return params
             }
         }
@@ -58,19 +70,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signup() {
-        val jsonObj = JSONObject()
-        jsonObj.put("name", "Neo")
-        jsonObj.put("password", "redPill123")
-
         val url = Constants.SERVER_URL + "/signup"
         //String Request initialized
         val request = object : StringRequest(
             Method.POST,
             url,
             Response.Listener { response ->
-                Toast.makeText(applicationContext, "Logged In Successfully as $response", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "Signed up Successfully as $response", Toast.LENGTH_SHORT)
                     .show()
-
             }, Response.ErrorListener { error ->
                 Toast.makeText(
                     applicationContext,
@@ -84,11 +91,42 @@ class LoginActivity : AppCompatActivity() {
             @Throws(AuthFailureError::class)
             override fun getBody(): ByteArray {
                 val params = HashMap<String, String>()
-                params["name"] = "Neo"
-                params["password"] = "redPill123"
+                params["name"] = etName.text.toString()
+                params["password"] = etPassword.text.toString()
                 return JSONObject(params as Map<*, *>?).toString().toByteArray()
             }
+        }
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
+    }
 
+    private fun login() {
+        val url = Constants.SERVER_URL + "/login"
+        //String Request initialized
+        val request = object : StringRequest(
+            Method.POST,
+            url,
+            Response.Listener { response ->
+                Toast.makeText(applicationContext, "Logged In Successfully", Toast.LENGTH_SHORT)
+                    .show()
+                Log.i(Constants.TAG, response)
+                AccountData.token = response;
+            }, Response.ErrorListener { error ->
+                Toast.makeText(
+                    applicationContext,
+                    error.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }) {
+            override fun getBodyContentType(): String {
+                return "application/json"
+            }
+            @Throws(AuthFailureError::class)
+            override fun getBody(): ByteArray {
+                val params = HashMap<String, String>()
+                params["name"] = etName.text.toString()
+                params["password"] = etPassword.text.toString()
+                return JSONObject(params as Map<*, *>?).toString().toByteArray()
+            }
         }
         VolleySingleton.getInstance(this).addToRequestQueue(request)
     }

@@ -44,7 +44,7 @@ public class Place {
     private Image image;
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.MERGE)
-    @JsonIgnoreProperties(value = {"text", "writer", "place"})
+    @JsonIgnoreProperties(value = {"place"})
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private List<Comment> comments;
 

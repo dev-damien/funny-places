@@ -22,13 +22,14 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 
 class MainActivity : AppCompatActivity() {
-    var RECORD_REQUEST_CODE = 101
+
+    private val RECORD_REQUEST_CODE = 101
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val button = findViewById<Button>(R.id.buLogin)
-        button.setOnClickListener {
+        if (AccountData.token.isBlank()) {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 

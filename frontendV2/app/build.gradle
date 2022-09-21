@@ -7,7 +7,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "de.th.obis.demofrgeofencing"
+        applicationId "de.damien.funnyplaces"
         minSdk 30
         targetSdk 32
         versionCode 1

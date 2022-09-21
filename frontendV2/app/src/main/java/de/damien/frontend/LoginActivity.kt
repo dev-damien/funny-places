@@ -1,17 +1,16 @@
 package de.damien.frontend
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.AuthFailureError
-import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import org.json.JSONObject
+import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
 
@@ -38,6 +37,11 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    //make it not possible to get back from login activity
+    override fun onBackPressed() {
+        Toast.makeText(this, "This action is not permitted", Toast.LENGTH_SHORT).show()
+    }
+
     //TODO remove later
     private fun referenceForLater() {
         val url = Constants.SERVER_URL + "/signup"
@@ -48,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
             Response.ErrorListener { error ->
                 Toast.makeText(
                     applicationContext,
-                    "Login failed: ${error.message}",
+                    "Login failed",
                     Toast.LENGTH_LONG
                 ).show()
             }) {
@@ -70,65 +74,84 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signup() {
-        val url = Constants.SERVER_URL + "/signup"
-        //String Request initialized
-        val request = object : StringRequest(
-            Method.POST,
-            url,
-            Response.Listener { response ->
-                Toast.makeText(applicationContext, "Signed up Successfully as $response", Toast.LENGTH_SHORT)
-                    .show()
-            }, Response.ErrorListener { error ->
-                Toast.makeText(
-                    applicationContext,
-                    error.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }) {
-            override fun getBodyContentType(): String {
-                return "application/json"
+        try {
+            val url = Constants.SERVER_URL + "/signup"
+            //String Request initialized
+            val request = object : StringRequest(
+                Method.POST,
+                url,
+                Response.Listener { response ->
+                    Toast.makeText(
+                        applicationContext,
+                        "Signed up Successfully as $response",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }, Response.ErrorListener { error ->
+                    Toast.makeText(
+                        applicationContext,
+                        "Signup failed",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }) {
+                override fun getBodyContentType(): String {
+                    return "application/json"
+                }
+
+                @Throws(AuthFailureError::class)
+                override fun getBody(): ByteArray {
+                    val params = HashMap<String, String>()
+                    params["name"] = etName.text.toString()
+                    params["password"] = etPassword.text.toString()
+                    return JSONObject(params as Map<*, *>?).toString().toByteArray()
+                }
             }
-            @Throws(AuthFailureError::class)
-            override fun getBody(): ByteArray {
-                val params = HashMap<String, String>()
-                params["name"] = etName.text.toString()
-                params["password"] = etPassword.text.toString()
-                return JSONObject(params as Map<*, *>?).toString().toByteArray()
-            }
+            VolleySingleton.getInstance(this).addToRequestQueue(request)
+        } catch (ex: Exception) {
+
         }
-        VolleySingleton.getInstance(this).addToRequestQueue(request)
+
     }
 
     private fun login() {
-        val url = Constants.SERVER_URL + "/login"
-        //String Request initialized
-        val request = object : StringRequest(
-            Method.POST,
-            url,
-            Response.Listener { response ->
-                Toast.makeText(applicationContext, "Logged In Successfully", Toast.LENGTH_SHORT)
-                    .show()
-                Log.i(Constants.TAG, "token received: $response")
-                AccountData.token = response;
-            }, Response.ErrorListener { error ->
-                Toast.makeText(
-                    applicationContext,
-                    error.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }) {
-            override fun getBodyContentType(): String {
-                return "application/json"
+        try {
+            val url = Constants.SERVER_URL + "/login"
+            //String Request initialized
+            val request = object : StringRequest(
+                Method.POST,
+                url,
+                Response.Listener { response ->
+                    Toast.makeText(
+                        applicationContext,
+                        "Logged In Successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.i(Constants.TAG, "token received: $response")
+                    AccountData.token = response;
+                    finish()
+                }, Response.ErrorListener { error ->
+                    Toast.makeText(
+                        applicationContext,
+                        "Login failed",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }) {
+                override fun getBodyContentType(): String {
+                    return "application/json"
+                }
+
+                @Throws(AuthFailureError::class)
+                override fun getBody(): ByteArray {
+                    val params = HashMap<String, String>()
+                    params["name"] = etName.text.toString()
+                    params["password"] = etPassword.text.toString()
+                    return JSONObject(params as Map<*, *>?).toString().toByteArray()
+                }
             }
-            @Throws(AuthFailureError::class)
-            override fun getBody(): ByteArray {
-                val params = HashMap<String, String>()
-                params["name"] = etName.text.toString()
-                params["password"] = etPassword.text.toString()
-                return JSONObject(params as Map<*, *>?).toString().toByteArray()
-            }
+            VolleySingleton.getInstance(this).addToRequestQueue(request)
+        } catch (ex: Exception) {
+
         }
-        VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
 
 

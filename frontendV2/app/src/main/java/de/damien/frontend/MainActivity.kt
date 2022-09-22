@@ -10,20 +10,32 @@ import android.os.Environment
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
-import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Transformations.map
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.volley.AuthFailureError
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.StringRequest
 import com.google.android.gms.location.*
-import de.damien.frontend.R
+import de.damien.frontend.places.Place
+import de.damien.frontend.places.PlaceAdapter
+import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONArray
+import org.json.JSONObject
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
     private val RECORD_REQUEST_CODE = 101
+
+    private val placeList = mutableListOf<Place>()
+    private val adapter = PlaceAdapter(placeList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +44,19 @@ class MainActivity : AppCompatActivity() {
         if (AccountData.token.isBlank()) {
             startActivity(Intent(this, LoginActivity::class.java))
         }
+
+        //TODO get real data from backend
+
+//        var placeList = mutableListOf(
+//            Place("Cliff face", "Damien", Constants.SERVER_URL + "/images/1"),
+//            Place("other", "Damien", Constants.SERVER_URL + "/images/1"),
+//            Place("Cliff", "Damien", Constants.SERVER_URL + "/images/1"),
+//            Place("Monero Sticker", "Damien", Constants.SERVER_URL + "/images/1")
+//        )
+        getPlaces()
+
+        rvPlaces.adapter = adapter
+        rvPlaces.layoutManager = LinearLayoutManager(this)
 
         if (!Environment.isExternalStorageManager()) {
             val intent = Intent()
@@ -124,5 +149,43 @@ class MainActivity : AppCompatActivity() {
     fun updateMapPosition(myPos: GeoPoint) {
         map!!.controller.setCenter(myPos)
         map!!.controller.setZoom(19.0)
+    }
+
+    private fun getPlaces() {
+        try {
+            var curPlace: JSONObject
+            var curCreator: JSONObject
+            var curImage: JSONObject
+
+            val url = Constants.SERVER_URL + "/places"
+            //String Request initialized
+            val request = object : JsonArrayRequest(
+                Method.GET,
+                url,
+                null,
+                Response.Listener { response ->
+                    Log.i(Constants.TAG, "API call to get all places received: $response")
+                    for (i in 0 until response.length()) {
+                        curPlace = response.getJSONObject(i)
+                        curCreator = curPlace.getJSONObject("creator")
+                        curImage = curPlace.getJSONObject("image")
+
+                        placeList.add(
+                            Place(
+                                curPlace.get("title").toString(),
+                                curCreator.get("name").toString(),
+                                "${Constants.SERVER_URL}/images/${curImage.get("imageId")}"
+                            )
+                        )
+                    }
+                    Log.i(Constants.TAG, placeList.toString())
+                    adapter.notifyDataSetChanged()
+                }, Response.ErrorListener { _ ->
+                    Log.i(Constants.TAG, "API call GET /places failed")
+                }) {}
+            VolleySingleton.getInstance(this).addToRequestQueue(request)
+        } catch (ex: Exception) {
+
+        }
     }
 }

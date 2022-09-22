@@ -10,19 +10,15 @@ import android.os.Environment
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.StringRequest
 import com.google.android.gms.location.*
-import de.damien.frontend.places.Place
-import de.damien.frontend.places.PlaceAdapter
+import de.damien.frontend.recyclerviews.place.Place
+import de.damien.frontend.recyclerviews.place.PlaceAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONArray
 import org.json.JSONObject
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -41,18 +37,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (AccountData.token.isBlank()) {
+        supportActionBar?.title = "FunnyPlaces"
+
+        if (SessionData.token.isBlank()) {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
-        //TODO get real data from backend
-
-//        var placeList = mutableListOf(
-//            Place("Cliff face", "Damien", Constants.SERVER_URL + "/images/1"),
-//            Place("other", "Damien", Constants.SERVER_URL + "/images/1"),
-//            Place("Cliff", "Damien", Constants.SERVER_URL + "/images/1"),
-//            Place("Monero Sticker", "Damien", Constants.SERVER_URL + "/images/1")
-//        )
         getPlaces()
 
         rvPlaces.adapter = adapter
@@ -172,6 +162,7 @@ class MainActivity : AppCompatActivity() {
 
                         placeList.add(
                             Place(
+                                curPlace.get("placeId").toString(),
                                 curPlace.get("title").toString(),
                                 curCreator.get("name").toString(),
                                 "${Constants.SERVER_URL}/images/${curImage.get("imageId")}"

@@ -23,6 +23,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        supportActionBar?.title = "Login"
+
         buSignup = findViewById<Button>(R.id.buLoginSignup)
         buLogin = findViewById<Button>(R.id.buLoginLogin)
         etName = findViewById<EditText>(R.id.etLoginName)
@@ -127,7 +129,7 @@ class LoginActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.i(Constants.TAG, "token received: $response")
-                    AccountData.token = response;
+                    SessionData.token = response;
                     finish()
                 }, Response.ErrorListener { error ->
                     Toast.makeText(

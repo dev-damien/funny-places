@@ -1,6 +1,6 @@
 package de.damien.frontend
 
-object AccountData {
+object SessionData {
 
     var token = ""
 

@@ -129,7 +129,8 @@ class LoginActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.i(Constants.TAG, "token received: $response")
-                    SessionData.token = response;
+                    SessionData.token = response
+                    SessionData.name = etName.text.toString()
                     finish()
                 }, Response.ErrorListener { error ->
                     Toast.makeText(

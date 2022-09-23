@@ -10,11 +10,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.bumptech.glide.Glide
 import de.damien.frontend.recyclerviews.comment.Comment
 import de.damien.frontend.recyclerviews.comment.CommentAdapter
-import de.damien.frontend.recyclerviews.place.Place
-import de.damien.frontend.recyclerviews.place.PlaceAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_place_detail.*
-import kotlinx.android.synthetic.main.item_place.view.*
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -56,9 +52,9 @@ class PlaceDetailActivity : AppCompatActivity() {
                     image = response.getJSONObject("image")
                     val url = "${Constants.SERVER_URL}/images/$placeId"
 
-                    Glide.with(this).load(url).into(ivPlaceImage)
-                    tvPlaceTitleContent.text = response.get("title").toString()
-                    tvPlaceDescContent.text = response.get("description").toString()
+                    Glide.with(this).load(url).into(ivAddPlaceImage)
+                    tvAddPlaceTitleContent.text = response.get("title").toString()
+                    tvAddPlaceDescContent.text = response.get("description").toString()
                     tvPlaceCreatorContent.text = creator.get("name").toString()
                     tvPlaceLatValue.text = response.get("latitude").toString()
                     tvPlaceLonValue.text = response.get("longitude").toString()

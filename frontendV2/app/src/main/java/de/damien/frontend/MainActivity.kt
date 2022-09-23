@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
@@ -25,6 +26,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import java.lang.Exception
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +40,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportActionBar?.title = "FunnyPlaces"
+
+        val mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                getPlaces()
+                mainHandler.postDelayed(this, Constants.PULL_DELAY)
+            }
+        })
+
+        fabAddPlace.setOnClickListener {
+            startActivity(Intent(this, AddPlaceActivity::class.java))
+        }
 
         if (SessionData.token.isBlank()) {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -80,6 +94,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+        super.onActivityReenter(resultCode, data)
+    }
+
     var map: MapView? = null
 
     fun initMap() {
@@ -114,7 +132,7 @@ class MainActivity : AppCompatActivity() {
     var currentLat: String = ""
     var currentLon: String = ""
 
-    var locationCallback = object : LocationCallback() {
+    private var locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             locationResult ?: return
             for (it in locationResult.locations) {
@@ -154,6 +172,7 @@ class MainActivity : AppCompatActivity() {
                 url,
                 null,
                 Response.Listener { response ->
+                    placeList.clear()
                     Log.i(Constants.TAG, "API call to get all places received: $response")
                     for (i in 0 until response.length()) {
                         curPlace = response.getJSONObject(i)

@@ -7,7 +7,7 @@
     tools:context=".PlaceDetailActivity">
 
     <ImageView
-        android:id="@+id/ivPlaceImage"
+        android:id="@+id/ivAddPlaceImage"
         android:layout_width="0dp"
         android:layout_height="240dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,7 +16,7 @@
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <TextView
-        android:id="@+id/tvPlaceTitleText"
+        android:id="@+id/tvAddPlaceTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -25,35 +25,35 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPlaceImage" />
+        app:layout_constraintTop_toBottomOf="@+id/ivAddPlaceImage" />
 
     <TextView
-        android:id="@+id/tvPlaceDescText"
+        android:id="@+id/tvAddPlaceDescText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Description"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvPlaceTitleText"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceTitleContent" />
+        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceTitleText"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceTitleContent" />
 
     <TextView
-        android:id="@+id/tvPlaceTitleContent"
+        android:id="@+id/tvAddPlaceTitleContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="loading..."
-        app:layout_constraintStart_toStartOf="@+id/tvPlaceTitleText"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceTitleText" />
+        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceTitleText"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceTitleText" />
 
     <TextView
-        android:id="@+id/tvPlaceDescContent"
+        android:id="@+id/tvAddPlaceDescContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="loading..."
-        app:layout_constraintStart_toStartOf="@+id/tvPlaceTitleContent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceDescText" />
+        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceTitleContent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceDescText" />
 
     <TextView
         android:id="@+id/tvPlaceCreatorText"
@@ -63,35 +63,35 @@
         android:text="Created by"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvPlaceTitleText"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceDescContent" />
+        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceTitleText"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceDescContent" />
 
     <TextView
         android:id="@+id/tvPlaceCreatorContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="loading..."
-        app:layout_constraintStart_toStartOf="@+id/tvPlaceDescContent"
+        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceDescContent"
         app:layout_constraintTop_toBottomOf="@+id/tvPlaceCreatorText" />
 
     <TextView
-        android:id="@+id/tvPlaceLatitude"
+        android:id="@+id/tvAddPlaceLatitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Latitude:"
         app:layout_constraintStart_toStartOf="@+id/tvPlaceCreatorContent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceCoords" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceCoords" />
 
     <TextView
-        android:id="@+id/tvPlaceLongitude"
+        android:id="@+id/tvAddPlaceLongitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Longitude:"
-        app:layout_constraintStart_toStartOf="@+id/tvPlaceLatitude"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceLatitude" />
+        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceLatitude"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceLatitude" />
 
     <TextView
-        android:id="@+id/tvPlaceCoords"
+        android:id="@+id/tvAddPlaceCoords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -120,7 +120,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceLongitude" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceLongitude" />
 
     <TextView
         android:id="@+id/tvPlaceLatValue"
@@ -128,8 +128,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="loading..."
-        app:layout_constraintBottom_toBottomOf="@+id/tvPlaceLatitude"
-        app:layout_constraintStart_toEndOf="@+id/tvPlaceLatitude" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvAddPlaceLatitude"
+        app:layout_constraintStart_toEndOf="@+id/tvAddPlaceLatitude" />
 
     <TextView
         android:id="@+id/tvPlaceLonValue"

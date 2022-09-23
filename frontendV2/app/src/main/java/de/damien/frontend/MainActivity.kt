@@ -41,13 +41,13 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = "FunnyPlaces"
 
-//        val mainHandler = Handler(Looper.getMainLooper())
-//        mainHandler.post(object : Runnable {
-//            override fun run() {
-//                getPlaces()
-//                mainHandler.postDelayed(this, Constants.PULL_DELAY)
-//            }
-//        })
+        val mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                getPlaces()
+                mainHandler.postDelayed(this, Constants.PULL_DELAY)
+            }
+        })
 
         fabAddPlace.setOnClickListener {
             startActivity(Intent(this, AddPlaceActivity::class.java))
@@ -102,10 +102,17 @@ class MainActivity : AppCompatActivity() {
 
         updateMapPosition(GeoPoint(49.9540463, 7.9260000))
 
-        //draw neutral zone
-//        val poly = org.osmdroid.views.overlay.Polygon(map!!)
-//        poly.points = fence2
-//        map!!.overlays.add(poly)
+        //draw all places
+        for (place in placeList){
+            var fence = listOf(
+                GeoPoint(place.latitude, place.longitude),
+                GeoPoint(place.latitude, place.longitude)
+            )
+            val poly = org.osmdroid.views.overlay.Polygon(map!!)
+            val marker = org.osmdroid.views.overlay.Marker(map!!)
+            //marker.image
+            //map!!.overlays.add(poly)
+        }
 //
 //        val poly2 = org.osmdroid.views.overlay.Polygon(map!!)
 //        poly2.points = fence

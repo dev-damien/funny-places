@@ -41,13 +41,13 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = "FunnyPlaces"
 
-        val mainHandler = Handler(Looper.getMainLooper())
-        mainHandler.post(object : Runnable {
-            override fun run() {
-                getPlaces()
-                mainHandler.postDelayed(this, Constants.PULL_DELAY)
-            }
-        })
+//        val mainHandler = Handler(Looper.getMainLooper())
+//        mainHandler.post(object : Runnable {
+//            override fun run() {
+//                getPlaces()
+//                mainHandler.postDelayed(this, Constants.PULL_DELAY)
+//            }
+//        })
 
         fabAddPlace.setOnClickListener {
             startActivity(Intent(this, AddPlaceActivity::class.java))
@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
             intent.data = uri
             startActivity(intent)
         }
-
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -79,42 +78,39 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-
             val gpsPermissions = arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
             )
-
             ActivityCompat.requestPermissions(this, gpsPermissions, RECORD_REQUEST_CODE)
-
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         initMap()
         initGps()
-
     }
 
-    override fun onActivityReenter(resultCode: Int, data: Intent?) {
-        super.onActivityReenter(resultCode, data)
-    }
-
-    var map: MapView? = null
-
+    private var map: MapView? = null
     fun initMap() {
+        Log.i("MYTEST", "initializing the map")
         Configuration.getInstance().userAgentValue = applicationContext.packageName
-
         map = findViewById(R.id.map)
-
         map!!.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
         map!!.controller.setZoom(19.0)
 
         updateMapPosition(GeoPoint(49.9540463, 7.9260000))
-/*-
-        val poly = org.osmdroid.views.overlay.Polygon(map!!)
-        poly.points = fence.getPoints()
 
-        map!!.overlays.add(poly)
-   */
+        //draw neutral zone
+//        val poly = org.osmdroid.views.overlay.Polygon(map!!)
+//        poly.points = fence2
+//        map!!.overlays.add(poly)
+//
+//        val poly2 = org.osmdroid.views.overlay.Polygon(map!!)
+//        poly2.points = fence
+//        map!!.overlays.add(poly2)
+
     }
 
     lateinit var client: FusedLocationProviderClient
@@ -132,13 +128,12 @@ class MainActivity : AppCompatActivity() {
     var currentLat: String = ""
     var currentLon: String = ""
 
-    private var locationCallback = object : LocationCallback() {
+    var locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
-            locationResult ?: return
             for (it in locationResult.locations) {
-
-                if (currentLat != "%.4f".format(it.latitude) ||
-                    currentLon != "%.4f".format(it.longitude)
+                if (currentLat != "%.4f".format(it.latitude) || currentLon != "%.4f".format(
+                        it.longitude
+                    )
                 ) {
                     currentLat = "%.4f".format(it.latitude)
                     currentLon = "%.4f".format(it.longitude)
@@ -147,8 +142,8 @@ class MainActivity : AppCompatActivity() {
                     runOnUiThread {
                         updateMapPosition(GeoPoint(it.latitude, it.longitude))
                     }
+                    //checkFenceStatus(GeoPoint(it.latitude, it.longitude))
                 }
-                //            checkFenceStatus(GeoPoint(it.latitude, it.longitude))
             }
         }
     }

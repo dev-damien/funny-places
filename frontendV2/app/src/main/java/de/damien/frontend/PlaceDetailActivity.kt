@@ -2,6 +2,8 @@ package de.damien.frontend
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.MovementMethod
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Response
@@ -25,6 +27,8 @@ class PlaceDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_place_detail)
 
         supportActionBar?.hide()
+
+        tvAddPlaceDescContent.movementMethod = ScrollingMovementMethod()
 
         rvPlaceComments.adapter = adapter
         rvPlaceComments.layoutManager = LinearLayoutManager(this)

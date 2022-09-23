@@ -40,18 +40,25 @@
 
     <TextView
         android:id="@+id/tvAddPlaceTitleContent"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="loading..."
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvAddPlaceTitleText"
         app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceTitleText" />
 
     <TextView
         android:id="@+id/tvAddPlaceDescContent"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fadeScrollbars="false"
+        android:maxLines="4"
+        android:scrollbars="vertical"
         android:text="loading..."
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvAddPlaceTitleContent"
         app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceDescText" />
 
@@ -68,9 +75,11 @@
 
     <TextView
         android:id="@+id/tvPlaceCreatorContent"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:text="loading..."
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvAddPlaceDescContent"
         app:layout_constraintTop_toBottomOf="@+id/tvPlaceCreatorText" />
 
@@ -105,6 +114,7 @@
         android:id="@+id/rvPlaceComments"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvPlaceCommentsText"

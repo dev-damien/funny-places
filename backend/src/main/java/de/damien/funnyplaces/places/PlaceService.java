@@ -1,5 +1,7 @@
 package de.damien.funnyplaces.places;
 
+import de.damien.funnyplaces.accounts.AccountRepository;
+import de.damien.funnyplaces.accounts.AccountService;
 import de.damien.funnyplaces.comments.Comment;
 import de.damien.funnyplaces.comments.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +17,17 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
     private final CommentRepository commentRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
-    public PlaceService(PlaceRepository placeRepository, CommentRepository commentRepository) {
+    public PlaceService(PlaceRepository placeRepository, CommentRepository commentRepository, AccountRepository accountRepository) {
         this.placeRepository = placeRepository;
         this.commentRepository = commentRepository;
+        this.accountRepository = accountRepository;
     }
 
     public Place addPlace(Place place) {
+        accountRepository.save(place.getCreator());
         return placeRepository.save(place);
     }
 

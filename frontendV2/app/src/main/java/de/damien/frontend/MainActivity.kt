@@ -184,7 +184,9 @@ class MainActivity : AppCompatActivity() {
                                 curPlace.get("placeId").toString(),
                                 curPlace.get("title").toString(),
                                 curCreator.get("name").toString(),
-                                "${Constants.SERVER_URL}/images/${curImage.get("imageId")}"
+                                "${Constants.SERVER_URL}/images/${curImage.get("imageId")}",
+                                curPlace.get("latitude").toString().toDouble(),
+                                curPlace.get("longitude").toString().toDouble()
                             )
                         )
                     }

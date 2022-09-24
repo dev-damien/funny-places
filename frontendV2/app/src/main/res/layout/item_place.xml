@@ -36,4 +36,13 @@
         android:text="added by"
         app:layout_constraintStart_toStartOf="@+id/tvItemTitel"
         app:layout_constraintTop_toBottomOf="@+id/tvItemTitel" />
+
+    <ImageView
+        android:id="@+id/ivItemPlaceInfo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_info_details" />
 </androidx.constraintlayout.widget.ConstraintLayout>

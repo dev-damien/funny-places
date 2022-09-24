@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,6 +49,20 @@ class MainActivity : AppCompatActivity() {
                 mainHandler.postDelayed(this, Constants.PULL_DELAY)
             }
         })
+        //move map center to selected place
+        val mapCenter = Handler(Looper.getMainLooper())
+        mapCenter.post(object : Runnable {
+            override fun run() {
+                if (SessionData.isSelected){
+                    updateMapPosition(GeoPoint(
+                        SessionData.mapLat,
+                        SessionData.mapLon
+                    ))
+                }
+                mapCenter.postDelayed(this, 1000)
+            }
+        })
+
 
         fabAddPlace.setOnClickListener {
             startActivity(Intent(this, AddPlaceActivity::class.java))
@@ -147,7 +162,7 @@ class MainActivity : AppCompatActivity() {
                     Log.i("MYTEST", "Lat: ${it.latitude}")
                     Log.i("MYTEST", "Lon: ${it.longitude}")
                     runOnUiThread {
-                        updateMapPosition(GeoPoint(it.latitude, it.longitude))
+                        updateMapPosition(GeoPoint(SessionData.mapLat, SessionData.mapLon))
                     }
                     //checkFenceStatus(GeoPoint(it.latitude, it.longitude))
                 }

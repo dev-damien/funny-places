@@ -7,5 +7,7 @@ data class Place(
     val imageUrl: String,
 
     val latitude: Double,
-    val longitude: Double
+    val longitude: Double,
+
+    var isSelected:Boolean = false
 )

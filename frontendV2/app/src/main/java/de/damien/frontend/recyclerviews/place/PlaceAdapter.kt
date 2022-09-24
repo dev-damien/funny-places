@@ -52,6 +52,7 @@ class PlaceAdapter(
                 intent.putExtra("placeId", placeId)
                 holder.itemView.context.startActivity(intent)
             }
+            //TODO change field color depending on isSelected attribute
         }
     }
 

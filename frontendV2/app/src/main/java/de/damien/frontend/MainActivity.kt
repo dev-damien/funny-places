@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -17,15 +18,18 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import de.damien.frontend.recyclerviews.place.Place
 import de.damien.frontend.recyclerviews.place.PlaceAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.item_place.view.*
 import org.json.JSONObject
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
 import java.lang.Exception
 import java.util.*
 
@@ -42,6 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = "FunnyPlaces"
 
+        //pulling for new places
         val mainHandler = Handler(Looper.getMainLooper())
         mainHandler.post(object : Runnable {
             override fun run() {
@@ -54,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         mapCenter.post(object : Runnable {
             override fun run() {
                 if (SessionData.isSelected){
+                    SessionData.isSelected = false
                     updateMapPosition(GeoPoint(
                         SessionData.mapLat,
                         SessionData.mapLon
@@ -117,17 +123,6 @@ class MainActivity : AppCompatActivity() {
 
         updateMapPosition(GeoPoint(49.9540463, 7.9260000))
 
-        //draw all places
-        for (place in placeList){
-            var fence = listOf(
-                GeoPoint(place.latitude, place.longitude),
-                GeoPoint(place.latitude, place.longitude)
-            )
-            val poly = org.osmdroid.views.overlay.Polygon(map!!)
-            val marker = org.osmdroid.views.overlay.Marker(map!!)
-            //marker.image
-            //map!!.overlays.add(poly)
-        }
 //
 //        val poly2 = org.osmdroid.views.overlay.Polygon(map!!)
 //        poly2.points = fence
@@ -135,7 +130,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    lateinit var client: FusedLocationProviderClient
+    private lateinit var client: FusedLocationProviderClient
 
     @SuppressLint("MissingPermission")
     private fun initGps() {
@@ -209,12 +204,39 @@ class MainActivity : AppCompatActivity() {
                     }
                     Log.i(Constants.TAG, placeList.toString())
                     adapter.notifyDataSetChanged()
+                    drawPlaceMarker()
                 }, Response.ErrorListener { _ ->
                     Log.i(Constants.TAG, "API call GET /places failed")
                 }) {}
             VolleySingleton.getInstance(this).addToRequestQueue(request)
         } catch (ex: Exception) {
 
+        }
+    }
+
+    private fun drawPlaceMarker(){
+        //draw all places
+        for (place in placeList){
+            val marker = Marker(map!!)
+            marker.position= GeoPoint(
+                place.latitude,
+                place.longitude
+            )
+            map!!.overlays.add(marker)
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            marker.icon = resources.getDrawable(org.osmdroid.library.R.drawable.marker_default)
+            marker.setOnMarkerClickListener { _, _ ->
+                setPlaceSelected(place)
+                true
+            }
+            marker.title = place.title
+            marker.snippet = "by ${place.creator}"
+        }
+    }
+
+    private fun setPlaceSelected(place: Place) {
+        for (p in placeList){
+            p.isSelected = place.id == p.id
         }
     }
 }

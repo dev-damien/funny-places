@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -12,18 +11,16 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
+import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
-import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import de.damien.frontend.recyclerviews.place.Place
 import de.damien.frontend.recyclerviews.place.PlaceAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.item_place.view.*
 import org.json.JSONObject
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -31,7 +28,6 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import java.lang.Exception
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -58,12 +54,14 @@ class MainActivity : AppCompatActivity() {
         val mapCenter = Handler(Looper.getMainLooper())
         mapCenter.post(object : Runnable {
             override fun run() {
-                if (SessionData.isSelected){
+                if (SessionData.isSelected) {
                     SessionData.isSelected = false
-                    updateMapPosition(GeoPoint(
-                        SessionData.mapLat,
-                        SessionData.mapLon
-                    ))
+                    updateMapPosition(
+                        GeoPoint(
+                            SessionData.mapLat,
+                            SessionData.mapLon
+                        )
+                    )
                 }
                 mapCenter.postDelayed(this, 1000)
             }
@@ -72,6 +70,11 @@ class MainActivity : AppCompatActivity() {
 
         fabAddPlace.setOnClickListener {
             startActivity(Intent(this, AddPlaceActivity::class.java))
+        }
+        fabCenterMapOnYou.setOnClickListener {
+            SessionData.isSelected = true
+            SessionData.mapLat = currentLat.toDouble()
+            SessionData.mapLon = currentLon.toDouble()
         }
 
         if (SessionData.token.isBlank()) {
@@ -121,12 +124,8 @@ class MainActivity : AppCompatActivity() {
         map!!.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
         map!!.controller.setZoom(19.0)
 
+        //TODO remove later
         updateMapPosition(GeoPoint(49.9540463, 7.9260000))
-
-//
-//        val poly2 = org.osmdroid.views.overlay.Polygon(map!!)
-//        poly2.points = fence
-//        map!!.overlays.add(poly2)
 
     }
 
@@ -154,10 +153,10 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     currentLat = "%.4f".format(it.latitude)
                     currentLon = "%.4f".format(it.longitude)
-                    Log.i("MYTEST", "Lat: ${it.latitude}")
-                    Log.i("MYTEST", "Lon: ${it.longitude}")
+                    Log.i(Constants.TAG, "Lat: ${it.latitude}")
+                    Log.i(Constants.TAG, "Lon: ${it.longitude}")
                     runOnUiThread {
-                        updateMapPosition(GeoPoint(SessionData.mapLat, SessionData.mapLon))
+                        drawCurPosMarker()
                     }
                     //checkFenceStatus(GeoPoint(it.latitude, it.longitude))
                 }
@@ -214,29 +213,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun drawPlaceMarker(){
+    private fun drawPlaceMarker() {
         //draw all places
-        for (place in placeList){
+        for (place in placeList) {
             val marker = Marker(map!!)
-            marker.position= GeoPoint(
+            marker.position = GeoPoint(
                 place.latitude,
                 place.longitude
             )
             map!!.overlays.add(marker)
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             marker.icon = resources.getDrawable(org.osmdroid.library.R.drawable.marker_default)
-            marker.setOnMarkerClickListener { _, _ ->
-                setPlaceSelected(place)
-                true
-            }
             marker.title = place.title
             marker.snippet = "by ${place.creator}"
         }
     }
 
-    private fun setPlaceSelected(place: Place) {
-        for (p in placeList){
-            p.isSelected = place.id == p.id
-        }
+    private var markerUserPos: Marker? = null
+    private fun drawCurPosMarker() {
+        map!!.overlays.remove(markerUserPos)
+        markerUserPos = Marker(map!!)
+        markerUserPos?.position = GeoPoint(
+            currentLat.toDouble(),
+            currentLon.toDouble()
+        )
+        map!!.overlays.add(markerUserPos)
+        markerUserPos?.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        markerUserPos?.icon = resources.getDrawable(org.osmdroid.library.R.drawable.person)
+        markerUserPos?.title = "You"
     }
+
 }

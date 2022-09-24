@@ -54,7 +54,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                     Log.i(Constants.TAG, "API call to get place by id received: $response")
                     creator = response.getJSONObject("creator")
                     image = response.getJSONObject("image")
-                    val url = "${Constants.SERVER_URL}/images/$placeId"
+                    val url = "${Constants.SERVER_URL}/images/${image.get("imageId")}"
 
                     Glide.with(this).load(url).into(ivAddPlaceImage)
                     tvAddPlaceTitleContent.text = response.get("title").toString()

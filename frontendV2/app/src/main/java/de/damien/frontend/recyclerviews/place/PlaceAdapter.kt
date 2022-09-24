@@ -1,6 +1,7 @@
 package de.damien.frontend.recyclerviews.place
 
 import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -34,16 +35,17 @@ class PlaceAdapter(
             tvItemCreator.text = "by ${places[position].creator}"
             Glide.with(holder.itemView.context).load(places[position].imageUrl).into(ivItemPlace)
             this.setOnClickListener {
+                resetPlacesSelected()
                 val placeId = places[position].id
                 Log.i(Constants.TAG, "clicked on place with id $placeId")
-                SessionData.isSelected = true
+                SessionData.isSelected = true //to center map at selected place
+                places[position].isSelected = true//to mark this place in recyclerview
                 SessionData.mapLat = places[position].latitude
                 SessionData.mapLon = places[position].longitude
                 Log.i(
                     Constants.TAG,
                     "new map center: lat=${SessionData.mapLat}, lon=${SessionData.mapLon}"
                 )
-
             }
             ivItemPlaceInfo.setOnClickListener {
                 val placeId = places[position].id
@@ -52,7 +54,12 @@ class PlaceAdapter(
                 intent.putExtra("placeId", placeId)
                 holder.itemView.context.startActivity(intent)
             }
-            //TODO change field color depending on isSelected attribute
+        }
+    }
+
+    private fun resetPlacesSelected() {
+        for (p in places) {
+            p.isSelected = false
         }
     }
 

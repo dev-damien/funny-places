@@ -1,17 +1,15 @@
 package de.damien.frontend
 
 import android.app.AlertDialog
-import android.content.DialogInterface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.InputType
-import android.text.method.MovementMethod
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
@@ -23,12 +21,11 @@ import de.damien.frontend.recyclerviews.comment.Comment
 import de.damien.frontend.recyclerviews.comment.CommentAdapter
 import kotlinx.android.synthetic.main.activity_place_detail.*
 import org.json.JSONObject
-import java.lang.Exception
 
 class PlaceDetailActivity : AppCompatActivity() {
 
     private val commentList = mutableListOf<Comment>()
-    private val adapter = CommentAdapter(commentList)
+    private val adapter = CommentAdapter(commentList, this)
     private var placeId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +42,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         rvPlaceComments.layoutManager = LinearLayoutManager(this)
 
         buPlaceDetailAddComment.setOnClickListener {
-            showdialog()
+            showDialog()
         }
 
         getPlace()
@@ -130,12 +127,11 @@ class PlaceDetailActivity : AppCompatActivity() {
         }
     }
 
-    fun showdialog() {
+    private fun showDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle("Title")
+        builder.setTitle("Add a Comment")
         val input = EditText(this)
         input.hint = "Enter Comment"
-        //input.inputType = InputType.TYPE_CLASS_TEXT
         input.isSingleLine = false
         input.inputType = InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
         builder.setView(input)
@@ -144,7 +140,7 @@ class PlaceDetailActivity : AppCompatActivity() {
             val textInput = input.text.toString()
             if (textInput.isBlank()) {
                 Toast.makeText(this, "You have to enter something", Toast.LENGTH_SHORT).show()
-            } else{
+            } else {
                 Toast.makeText(this, "Comment has been added", Toast.LENGTH_SHORT).show()
                 addComment(textInput)
             }

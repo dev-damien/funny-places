@@ -7,7 +7,7 @@
     tools:context=".PlaceDetailActivity">
 
     <ImageView
-        android:id="@+id/ivAddPlaceImage"
+        android:id="@+id/ivPlaceDetailImage"
         android:layout_width="0dp"
         android:layout_height="240dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,7 +16,7 @@
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <TextView
-        android:id="@+id/tvAddPlaceTitleText"
+        android:id="@+id/tvPlaceDetailTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -25,32 +25,32 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivAddPlaceImage" />
+        app:layout_constraintTop_toBottomOf="@+id/ivPlaceDetailImage" />
 
     <TextView
-        android:id="@+id/tvAddPlaceDescText"
+        android:id="@+id/tvPlaceDetailDescText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Description"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceTitleText"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceTitleContent" />
+        app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailTitleText"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailTitleContent" />
 
     <TextView
-        android:id="@+id/tvAddPlaceTitleContent"
+        android:id="@+id/tvPlaceDetailTitleContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="loading..."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceTitleText"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceTitleText" />
+        app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailTitleText"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailTitleText" />
 
     <TextView
-        android:id="@+id/tvAddPlaceDescContent"
+        android:id="@+id/tvPlaceDetailDescContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -59,8 +59,8 @@
         android:scrollbars="vertical"
         android:text="loading..."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceTitleContent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceDescText" />
+        app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailTitleContent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailDescText" />
 
     <TextView
         android:id="@+id/tvPlaceCreatorText"
@@ -70,8 +70,8 @@
         android:text="Created by"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceTitleText"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceDescContent" />
+        app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailTitleText"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailDescContent" />
 
     <TextView
         android:id="@+id/tvPlaceCreatorContent"
@@ -80,27 +80,27 @@
         android:layout_marginEnd="8dp"
         android:text="loading..."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceDescContent"
+        app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailDescContent"
         app:layout_constraintTop_toBottomOf="@+id/tvPlaceCreatorText" />
 
     <TextView
-        android:id="@+id/tvAddPlaceLatitude"
+        android:id="@+id/tvPlaceDetailLatitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Latitude:"
         app:layout_constraintStart_toStartOf="@+id/tvPlaceCreatorContent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceCoords" />
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailCoords" />
 
     <TextView
-        android:id="@+id/tvAddPlaceLongitude"
+        android:id="@+id/tvPlaceDetailLongitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Longitude:"
-        app:layout_constraintStart_toStartOf="@+id/tvAddPlaceLatitude"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceLatitude" />
+        app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailLatitude"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailLatitude" />
 
     <TextView
-        android:id="@+id/tvAddPlaceCoords"
+        android:id="@+id/tvPlaceDetailCoords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -130,7 +130,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddPlaceLongitude" />
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailLongitude" />
 
     <TextView
         android:id="@+id/tvPlaceLatValue"
@@ -138,8 +138,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="loading..."
-        app:layout_constraintBottom_toBottomOf="@+id/tvAddPlaceLatitude"
-        app:layout_constraintStart_toEndOf="@+id/tvAddPlaceLatitude" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvPlaceDetailLatitude"
+        app:layout_constraintStart_toEndOf="@+id/tvPlaceDetailLatitude" />
 
     <TextView
         android:id="@+id/tvPlaceLonValue"
@@ -148,4 +148,15 @@
         android:text="loading..."
         app:layout_constraintStart_toStartOf="@+id/tvPlaceLatValue"
         app:layout_constraintTop_toBottomOf="@+id/tvPlaceLatValue" />
+
+    <Button
+        android:id="@+id/buPlaceDetailAddComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Add comment"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/rvPlaceComments"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

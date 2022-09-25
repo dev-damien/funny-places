@@ -1,22 +1,32 @@
 package de.damien.frontend
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.exifinterface.media.ExifInterface
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_add_place.*
 import org.json.JSONObject
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 class AddPlaceActivity : AppCompatActivity() {
+
+    private val RECORD_REQUEST_CODE = 102
 
     var imageData: ByteArray? = null
     var imageId = -1
@@ -39,6 +49,10 @@ class AddPlaceActivity : AppCompatActivity() {
 
         ivAddPlaceImage.setOnClickListener {
             openGallery()
+        }
+
+        buAddPlaceFillCoords.setOnClickListener {
+            enterLastLocation()
         }
 
         buAddPlaceDone.setOnClickListener {
@@ -72,6 +86,11 @@ class AddPlaceActivity : AppCompatActivity() {
             }
             addPlaceAndImage()
         }
+    }
+
+    private fun enterLastLocation() {
+        etAddPlaceLatInput.setText(SessionData.latitude.toString())
+        etAddPlaceLonInput.setText(SessionData.longitude.toString())
     }
 
     private fun postPlace() {
@@ -211,7 +230,7 @@ class AddPlaceActivity : AppCompatActivity() {
             etAddPlaceLatInput.setText(lat.toString())
             etAddPlaceLonInput.setText(lon.toString())
         } catch (ex: Exception) {
-
+            Log.e(Constants.TAG, ex.toString())
         }
     }
 }

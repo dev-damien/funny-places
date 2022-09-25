@@ -12,4 +12,7 @@ object SessionData {
     var mapLat: Double = 49.9540463
     var mapLon: Double = 7.9260000
 
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
+
 }

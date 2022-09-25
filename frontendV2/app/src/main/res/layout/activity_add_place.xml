@@ -143,6 +143,8 @@
         android:id="@+id/tvAddPlaceImageText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:shadowColor="#FFFFFF"
+        android:shadowRadius="2"
         android:text="Tap to select image"
         android:textColor="#000000"
         android:textColorHint="#CD1616"
@@ -150,5 +152,15 @@
         app:layout_constraintEnd_toEndOf="@+id/ivAddPlaceImage"
         app:layout_constraintStart_toStartOf="@+id/ivAddPlaceImage"
         app:layout_constraintTop_toTopOf="@+id/ivAddPlaceImage" />
+
+    <Button
+        android:id="@+id/buAddPlaceFillCoords"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Use current &#10;location"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etAddPlaceLatInput"
+        app:layout_constraintTop_toTopOf="@+id/etAddPlaceLatInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

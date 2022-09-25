@@ -124,9 +124,7 @@ class MainActivity : AppCompatActivity() {
         map!!.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
         map!!.controller.setZoom(19.0)
 
-        //TODO remove later
         updateMapPosition(GeoPoint(49.9540463, 7.9260000))
-
     }
 
     private lateinit var client: FusedLocationProviderClient
@@ -153,6 +151,8 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     currentLat = "%.4f".format(it.latitude)
                     currentLon = "%.4f".format(it.longitude)
+                    SessionData.latitude = it.latitude
+                    SessionData.longitude = it.longitude
                     Log.i(Constants.TAG, "Lat: ${it.latitude}")
                     Log.i(Constants.TAG, "Lon: ${it.longitude}")
                     runOnUiThread {

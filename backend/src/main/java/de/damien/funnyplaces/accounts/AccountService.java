@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityExistsException;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -132,4 +133,21 @@ public class AccountService {
         return token;
     }
 
+    /**
+     * @param account account to delete with password to verify
+     * @return name of deleted acc if successfull,
+     *         null otherwise
+     */
+    public String delete(Account account) throws NoSuchElementException, AuthenticationException {
+        Optional<Account> accountDBOpt = accountRepository.findById(account.getName());
+        if (accountDBOpt.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Account accountDB = accountDBOpt.get();
+        if (!accountDB.getPassword().equals(account.getPassword())) {
+            throw new AuthenticationException();
+        }
+        accountRepository.delete(account);
+        return accountDBOpt.get().getName();
+    }
 }

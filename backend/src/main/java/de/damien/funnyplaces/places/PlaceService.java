@@ -1,7 +1,6 @@
 package de.damien.funnyplaces.places;
 
 import de.damien.funnyplaces.accounts.AccountRepository;
-import de.damien.funnyplaces.accounts.AccountService;
 import de.damien.funnyplaces.comments.Comment;
 import de.damien.funnyplaces.comments.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +50,10 @@ public class PlaceService {
         Optional<Place> place = placeRepository.findById(id);
         if (place.isEmpty()) throw new NoSuchElementException();
         Place placeDB = place.get();
-        placeDB.setTitle(placeNew.getTitle());
-        placeDB.setDescription(placeNew.getDescription());
+        if (placeNew.getTitle() != null && !placeNew.getTitle().isBlank())
+            placeDB.setTitle(placeNew.getTitle());
+        if (placeNew.getDescription() != null && !placeNew.getDescription().isBlank())
+            placeDB.setDescription(placeNew.getDescription());
         placeRepository.save(placeDB);
         return place.get();
     }

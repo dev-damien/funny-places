@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityExistsException;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -43,6 +44,17 @@ public class AccountController {
             return accountService.logout(token);
         } catch (AuthenticationException ex) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @DeleteMapping("/account")
+    public String delete(@RequestBody Account account) {
+        try {
+            return accountService.delete(account);
+        } catch (AuthenticationException ex) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 

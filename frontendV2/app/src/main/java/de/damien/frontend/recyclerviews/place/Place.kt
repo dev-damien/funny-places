@@ -2,9 +2,10 @@ package de.damien.frontend.recyclerviews.place
 
 data class Place(
     val id: String,
-    val title: String,
+    var title: String,
     val creator: String,
-    val imageUrl: String,
+    var description: String,
+    var imageUrl: String,
 
     val latitude: Double,
     val longitude: Double,

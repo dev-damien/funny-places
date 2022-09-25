@@ -35,12 +35,12 @@ public class CommentService {
         return commentOptional.get();
     }
 
-    public Comment updateComment(Long id, Comment commentNew) throws NoSuchElementException {
+    public Long updateComment(Long id, Comment commentNew) throws NoSuchElementException {
         Optional<Comment> commentOptional = commentRepository.findById(id);
         if (commentOptional.isEmpty()) throw new NoSuchElementException();
         Comment commentDB = commentOptional.get();
         commentDB.setText(commentNew.getText());
-        return commentRepository.save(commentDB);
+        return commentRepository.save(commentDB).getCommentId();
     }
 
     public Comment deleteComment(Long id) throws NoSuchElementException {

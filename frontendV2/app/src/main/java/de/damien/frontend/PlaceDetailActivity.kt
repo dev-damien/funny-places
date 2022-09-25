@@ -7,6 +7,7 @@ import android.os.Looper
 import android.text.InputType
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,10 +20,13 @@ import com.android.volley.toolbox.StringRequest
 import com.bumptech.glide.Glide
 import de.damien.frontend.recyclerviews.comment.Comment
 import de.damien.frontend.recyclerviews.comment.CommentAdapter
+import de.damien.frontend.recyclerviews.place.Place
 import kotlinx.android.synthetic.main.activity_place_detail.*
 import org.json.JSONObject
 
 class PlaceDetailActivity : AppCompatActivity() {
+
+    private var place: Place? = null
 
     private val commentList = mutableListOf<Comment>()
     private val adapter = CommentAdapter(commentList, this)
@@ -45,6 +49,14 @@ class PlaceDetailActivity : AppCompatActivity() {
             showDialog()
         }
 
+        ivPlaceDetailTitleEdit.setOnClickListener {
+            editTitle()
+        }
+
+        ivPlaceDetailDescEdit.setOnClickListener {
+            editDesc()
+        }
+
         getPlace()
 
         //pulling for new comments
@@ -56,6 +68,112 @@ class PlaceDetailActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun editTitle() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("Edit your Title")
+        val input = EditText(this)
+        input.hint = "Enter Title"
+        input.isSingleLine = true
+        input.inputType = InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
+        input.setText(place!!.title)
+        builder.setView(input)
+
+        builder.setPositiveButton("EDIT") { _, _ ->
+            val textInput = input.text.toString()
+            if (textInput.isBlank()) {
+                Toast.makeText(this, "You have to enter something", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Title has been changed", Toast.LENGTH_SHORT).show()
+                patchTitle(textInput)
+            }
+        }
+        builder.setNegativeButton("Cancel") { dialog, which ->
+            dialog.cancel()
+        }
+        builder.show()
+    }
+
+    private fun patchTitle(title: String) {
+        Log.i(Constants.TAG, "try to edit title of place with id: $placeId")
+        val url = Constants.SERVER_URL + "/places/$placeId"
+        val request = object : StringRequest(
+            Method.PATCH,
+            url,
+            Response.Listener { response ->
+                Log.i(Constants.TAG, "PATCH /places/$placeId response: $response")
+                tvPlaceDetailTitleContent.text = title
+            }, Response.ErrorListener { error ->
+                Log.e(Constants.TAG, "Something failed: $error")
+            }) {
+            override fun getBodyContentType(): String {
+                return "application/json"
+            }
+
+            @Throws(AuthFailureError::class)
+            override fun getBody(): ByteArray {
+                val params = HashMap<String, String>()
+                params["title"] = title
+                val jsonRequestBody = JSONObject(params as Map<*, *>?)
+                Log.i(Constants.TAG, "PATCH /places/$placeId JSON: $jsonRequestBody")
+                return jsonRequestBody.toString().toByteArray()
+            }
+        }
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
+    }
+
+    private fun editDesc() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("Edit your Description")
+        val input = EditText(this)
+        input.hint = "Enter Description"
+        input.isSingleLine = false
+        input.inputType = InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
+        input.setText(place!!.description)
+        builder.setView(input)
+
+        builder.setPositiveButton("EDIT") { _, _ ->
+            val textInput = input.text.toString()
+            if (textInput.isBlank()) {
+                Toast.makeText(this, "You have to enter something", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Description has been changed", Toast.LENGTH_SHORT).show()
+                patchDescription(textInput)
+            }
+        }
+        builder.setNegativeButton("Cancel") { dialog, which ->
+            dialog.cancel()
+        }
+        builder.show()
+    }
+
+    private fun patchDescription(desc: String) {
+        Log.i(Constants.TAG, "try to edit description of place with id: $placeId")
+        val url = Constants.SERVER_URL + "/places/$placeId"
+        val request = object : StringRequest(
+            Method.PATCH,
+            url,
+            Response.Listener { response ->
+                Log.i(Constants.TAG, "PATCH /places/$placeId response: $response")
+                tvPlaceDetailDescContent.text = desc
+            }, Response.ErrorListener { error ->
+                Log.e(Constants.TAG, "Something failed: $error")
+            }) {
+            override fun getBodyContentType(): String {
+                return "application/json"
+            }
+
+            @Throws(AuthFailureError::class)
+            override fun getBody(): ByteArray {
+                val params = HashMap<String, String>()
+                params["description"] = desc
+                val jsonRequestBody = JSONObject(params as Map<*, *>?)
+                Log.i(Constants.TAG, "PATCH /places/$placeId JSON: $jsonRequestBody")
+                return jsonRequestBody.toString().toByteArray()
+            }
+        }
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
 
     private fun getPlace() {
@@ -76,12 +194,27 @@ class PlaceDetailActivity : AppCompatActivity() {
                     val url = "${Constants.SERVER_URL}/images/${image.get("imageId")}"
 
                     Glide.with(this).load(url).into(ivPlaceDetailImage)
-                    tvPlaceDetailTitleContent.text = response.get("title").toString()
-                    tvPlaceDetailDescContent.text = response.get("description").toString()
-                    tvPlaceCreatorContent.text = creator.get("name").toString()
-                    tvPlaceLatValue.text = response.get("latitude").toString()
-                    tvPlaceLonValue.text = response.get("longitude").toString()
-                }, Response.ErrorListener { _ ->
+                    place = Place(
+                        placeId,
+                        response.get("title").toString(),
+                        creator.get("name").toString(),
+                        response.get("description").toString(),
+                        "null",
+                        response.get("latitude").toString().toDouble(),
+                        response.get("longitude").toString().toDouble(),
+                        false
+                    )
+                    tvPlaceDetailTitleContent.text = place?.title
+                    tvPlaceDetailDescContent.text = place?.description
+                    tvPlaceCreatorContent.text = place?.creator
+                    tvPlaceLatValue.text = place?.latitude.toString()
+                    tvPlaceLonValue.text = place?.longitude.toString()
+                    if (place!!.creator == SessionData.name) {
+                        ivPlaceDetailTitleEdit.visibility = View.VISIBLE
+                        ivPlaceDetailDescEdit.visibility = View.VISIBLE
+                        //ivPlaceDetailImageEdit.visibility = View.VISIBLE
+                    }
+                }, Response.ErrorListener {
                     Log.i(Constants.TAG, "API call GET /places/{id} failed")
                 }) {}
             VolleySingleton.getInstance(this).addToRequestQueue(request)

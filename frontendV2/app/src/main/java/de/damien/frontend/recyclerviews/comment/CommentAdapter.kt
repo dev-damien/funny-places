@@ -39,54 +39,53 @@ class CommentAdapter(
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         holder.itemView.apply {
-            val writer = comments[position].writer  + ":"
+            val writer = comments[position].writer
             val id = comments[position].id
             val text = comments[position].text
-            tvCommentWriter.text = writer
+            tvCommentWriter.text = "$writer:"
             tvCommentText.text = text
 
             if (writer == SessionData.name) {
                 //your own comment
-                ivCommentEdit.apply {
-                    visibility = View.VISIBLE
-                    setOnClickListener {
-                        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-                        builder.setTitle("Edit comment")
-                        val input = EditText(context)
-                        input.setText(text)
-                        input.hint = "Enter Comment"
-                        input.isSingleLine = false
-                        input.inputType = InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
-                        builder.setView(input)
+                ivCommentEdit.visibility = View.VISIBLE
+                ivCommentEdit.setOnClickListener {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                    builder.setTitle("Edit comment")
+                    val input = EditText(context)
+                    input.setText(text)
+                    input.hint = "Enter Comment"
+                    input.isSingleLine = false
+                    input.inputType = InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
+                    builder.setView(input)
 
-                        builder.setPositiveButton("OK") { dialog, _ ->
-                            val textInput = input.text.toString()
-                            if (textInput == text) {
-                                dialog.dismiss()
-                            }
-                            if (textInput.isBlank()) {
-                                Toast.makeText(
-                                    context,
-                                    "You have to enter something",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "Comment has been edited",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                                editComment(id, textInput)
-                            }
+                    builder.setPositiveButton("OK") { dialog, _ ->
+                        val textInput = input.text.toString()
+                        if (textInput == text) {
+                            dialog.dismiss()
                         }
-                        builder.setNegativeButton("Cancel") { dialog, which ->
-                            dialog.cancel()
+                        if (textInput.isBlank()) {
+                            Toast.makeText(
+                                context,
+                                "You have to enter something",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Comment has been edited",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            editComment(id, textInput)
                         }
-                        builder.show()
-
                     }
+                    builder.setNegativeButton("Cancel") { dialog, which ->
+                        dialog.cancel()
+                    }
+                    builder.show()
+
                 }
+
             }
         }
     }

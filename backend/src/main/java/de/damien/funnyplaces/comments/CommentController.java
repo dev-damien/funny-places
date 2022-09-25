@@ -38,7 +38,7 @@ public class CommentController {
     }
 
     @PatchMapping(path = "/comments/{id}")
-    public Comment updateComment(@PathVariable("id") Long id, @RequestBody Comment commentNew) {
+    public Long updateComment(@PathVariable("id") Long id, @RequestBody Comment commentNew) {
         try {
             return commentService.updateComment(id, commentNew);
         } catch (NoSuchElementException ex) {

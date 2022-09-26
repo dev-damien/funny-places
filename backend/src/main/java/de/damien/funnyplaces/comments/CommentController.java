@@ -47,7 +47,7 @@ public class CommentController {
     }
 
     @DeleteMapping(path = "/comments/{id}")
-    public Comment deleteComment(@PathVariable("id") Long id) {
+    public Long deleteComment(@PathVariable("id") Long id) {
         try {
             return commentService.deleteComment(id);
         } catch (NoSuchElementException ex) {

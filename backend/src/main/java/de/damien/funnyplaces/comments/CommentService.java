@@ -43,11 +43,11 @@ public class CommentService {
         return commentRepository.save(commentDB).getCommentId();
     }
 
-    public Comment deleteComment(Long id) throws NoSuchElementException {
+    public Long deleteComment(Long id) throws NoSuchElementException {
         Optional<Comment> commentOptional = commentRepository.findById(id);
         if (commentOptional.isEmpty()) throw new NoSuchElementException();
         Comment commentDB = commentOptional.get();
         commentRepository.deleteById(id);
-        return commentDB;
+        return commentDB.getCommentId();
     }
 }

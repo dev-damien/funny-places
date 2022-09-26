@@ -31,8 +31,9 @@ public class Place {
     private Long placeId;
     private String title;
     private String description;
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "creator")
+    //@ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne()
+    @JoinColumn(name = "creator", nullable = false)
     @JsonIgnoreProperties(value = {"password", "createdPlaces", "comments"})
     private Account creator;
     private Double latitude;

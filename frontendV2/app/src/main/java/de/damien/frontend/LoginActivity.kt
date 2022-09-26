@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_place_detail.*
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -16,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var buSignup: Button
     private lateinit var buLogin: Button
+    private lateinit var buDelete: Button
     private lateinit var etName: EditText
     private lateinit var etPassword: EditText
 
@@ -27,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
 
         buSignup = findViewById<Button>(R.id.buLoginSignup)
         buLogin = findViewById<Button>(R.id.buLoginLogin)
+        buDelete = findViewById<Button>(R.id.buLoginDeleteAccount)
         etName = findViewById<EditText>(R.id.etLoginName)
         etPassword = findViewById<EditText>(R.id.etLoginPassword)
 
@@ -36,44 +40,17 @@ class LoginActivity : AppCompatActivity() {
         buLogin.setOnClickListener {
             login()
         }
+        buDelete.setOnClickListener {
+            delete()
+        }
 
     }
 
     //make it not possible to get back from login activity
     override fun onBackPressed() {
-        Toast.makeText(this, "This action is not permitted", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "This action is not allowed", Toast.LENGTH_SHORT).show()
     }
 
-    //TODO remove later
-    private fun referenceForLater() {
-        val url = Constants.SERVER_URL + "/signup"
-        val request: StringRequest = object : StringRequest(Method.POST, url,
-            Response.Listener { response ->
-                Toast.makeText(applicationContext, response.toString(), Toast.LENGTH_LONG).show()
-            },
-            Response.ErrorListener { error ->
-                Toast.makeText(
-                    applicationContext,
-                    "Login failed",
-                    Toast.LENGTH_LONG
-                ).show()
-            }) {
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["name"] = etName.text.toString()
-                params["password"] = etPassword.text.toString()
-                return params
-            }
-
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                params["Content-Type"] = "application/json"
-                return params
-            }
-        }
-        VolleySingleton.getInstance(this).addToRequestQueue(request)
-    }
 
     private fun signup() {
         try {
@@ -155,6 +132,40 @@ class LoginActivity : AppCompatActivity() {
         } catch (ex: Exception) {
 
         }
+    }
+
+    private fun delete() {
+        val name = etName.text.toString()
+        val password = etPassword.text.toString()
+        Log.i(Constants.TAG, "try to delete account with name: $name")
+        val url = Constants.SERVER_URL + "/accounts/$name"
+        val request = object : StringRequest(
+            Method.DELETE,
+            url,
+            Response.Listener { response ->
+                Log.i(Constants.TAG, "DELETE /accounts response: $response")
+                Toast.makeText(
+                    applicationContext,
+                    "Account has been deleted",
+                    Toast.LENGTH_SHORT
+                ).show()
+                SessionData.name = ""
+            }, Response.ErrorListener { error ->
+                Log.e(Constants.TAG, "Something failed: $error")
+                error.printStackTrace()
+                Toast.makeText(
+                    applicationContext,
+                    "Credentials are invalid",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }) {
+            override fun getHeaders(): MutableMap<String, String>? {
+                val params: HashMap<String, String> = HashMap()
+                params["password"] = password
+                return params
+            }
+        }
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
 
 

@@ -134,20 +134,23 @@ public class AccountService {
     }
 
     /**
-     * @param account account to delete with password to verify
-     * @return name of deleted acc if successfull,
-     *         null otherwise
+     * @param name     name of account
+     * @param password password of account
+     * @return name of deleted user
+     * @throws NoSuchElementException  if username does not exist
+     * @throws AuthenticationException if password is wrong
      */
-    public String delete(Account account) throws NoSuchElementException, AuthenticationException {
-        Optional<Account> accountDBOpt = accountRepository.findById(account.getName());
+    public String delete(String name, String password)
+            throws NoSuchElementException, AuthenticationException {
+        Optional<Account> accountDBOpt = accountRepository.findById(name);
         if (accountDBOpt.isEmpty()) {
             throw new NoSuchElementException();
         }
         Account accountDB = accountDBOpt.get();
-        if (!accountDB.getPassword().equals(account.getPassword())) {
+        if (!accountDB.getPassword().equals(password)) {
             throw new AuthenticationException();
         }
-        accountRepository.delete(account);
-        return accountDBOpt.get().getName();
+        accountRepository.delete(accountDB);
+        return name;
     }
 }

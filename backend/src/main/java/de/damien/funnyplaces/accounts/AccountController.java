@@ -47,10 +47,10 @@ public class AccountController {
         }
     }
 
-    @DeleteMapping("/account")
-    public String delete(@RequestBody Account account) {
+    @DeleteMapping("/accounts/{name}")
+    public String delete(@PathVariable("name") String name, @RequestHeader("password") String password) throws ResponseStatusException {
         try {
-            return accountService.delete(account);
+            return accountService.delete(name, password);
         } catch (AuthenticationException ex) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         } catch (NoSuchElementException ex) {

@@ -20,7 +20,7 @@ public class CommentController {
     }
 
     @PostMapping(path = "/comments")
-    public Long addComment(@RequestBody Comment comment, String token) {
+    public Long addComment(@RequestBody Comment comment, @RequestHeader("token") String token) {
         try {
             return commentService.addComment(comment, token).getCommentId();
         } catch (AuthenticationException ex) {
@@ -29,29 +29,35 @@ public class CommentController {
     }
 
     @GetMapping(path = "/comments/{id}")
-    public Comment getComment(@PathVariable("id") Long id) {
+    public Comment getComment(@PathVariable("id") Long id, @RequestHeader("token") String token) {
         try {
-            return commentService.getComment(id);
+            return commentService.getComment(id, token);
         } catch (NoSuchElementException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (AuthenticationException ex) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 
     @PatchMapping(path = "/comments/{id}")
-    public Long updateComment(@PathVariable("id") Long id, @RequestBody Comment commentNew) {
+    public Long updateComment(@PathVariable("id") Long id, @RequestBody Comment commentNew, @RequestHeader("token") String token) {
         try {
-            return commentService.updateComment(id, commentNew);
+            return commentService.updateComment(id, commentNew, token);
         } catch (NoSuchElementException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (AuthenticationException ex) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 
     @DeleteMapping(path = "/comments/{id}")
-    public Long deleteComment(@PathVariable("id") Long id) {
+    public Long deleteComment(@PathVariable("id") Long id, @RequestHeader("token") String token) {
         try {
-            return commentService.deleteComment(id);
+            return commentService.deleteComment(id, token);
         } catch (NoSuchElementException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (AuthenticationException ex) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 }

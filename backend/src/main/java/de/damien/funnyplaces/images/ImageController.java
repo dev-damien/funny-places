@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.naming.AuthenticationException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 
@@ -23,23 +24,27 @@ public class ImageController {
     }
 
     @PostMapping
-    public Long uploadImage(@RequestParam("image") MultipartFile file) {
+    public Long uploadImage(@RequestParam("image") MultipartFile file, @RequestHeader("token") String token) {
         try {
-            return imageService.uploadImage(file);
+            return imageService.uploadImage(file, token);
         } catch (IOException ex) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (AuthenticationException ex) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<?> downloadImage(@PathVariable("id") Long id) {
+    public ResponseEntity<?> downloadImage(@PathVariable("id") Long id, @RequestHeader("token") String token) {
         try {
-            byte[] imageData = imageService.downloadImage(id);
+            byte[] imageData = imageService.downloadImage(id, token);
             return ResponseEntity.status(HttpStatus.OK)
                     .contentType(MediaType.valueOf("image/jpeg"))
                     .body(imageData);
         } catch (NoSuchFileException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (AuthenticationException ex) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 

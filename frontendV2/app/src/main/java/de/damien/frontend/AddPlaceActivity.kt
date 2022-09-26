@@ -129,6 +129,12 @@ class AddPlaceActivity : AppCompatActivity() {
                 Log.i(Constants.TAG, "POST /places JSON: $jsonRequestBody")
                 return jsonRequestBody.toString().toByteArray()
             }
+
+            override fun getHeaders(): MutableMap<String, String>? {
+                val params: HashMap<String, String> = HashMap()
+                params["token"] = SessionData.token
+                return params
+            }
         }
         VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
@@ -159,6 +165,12 @@ class AddPlaceActivity : AppCompatActivity() {
             override fun getByteData(): MutableMap<String, FileDataPart> {
                 val params = HashMap<String, FileDataPart>()
                 params["image"] = FileDataPart("imagePlace", imageData!!, "jpeg")
+                return params
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                val params: HashMap<String, String> = HashMap()
+                params["token"] = SessionData.token
                 return params
             }
         }

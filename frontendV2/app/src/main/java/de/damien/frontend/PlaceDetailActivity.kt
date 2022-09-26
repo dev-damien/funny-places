@@ -96,11 +96,11 @@ class PlaceDetailActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }) {
-//            override fun getHeaders(): MutableMap<String, String>? {
-//                val params: HashMap<String, String> = HashMap()
-//                params["password"] = password
-//                return params
-//            }
+            override fun getHeaders(): MutableMap<String, String>? {
+                val params: HashMap<String, String> = HashMap()
+                params["token"] = SessionData.token
+                return params
+            }
         }
         VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
@@ -153,6 +153,12 @@ class PlaceDetailActivity : AppCompatActivity() {
                 val jsonRequestBody = JSONObject(params as Map<*, *>?)
                 Log.i(Constants.TAG, "PATCH /places/$placeId JSON: $jsonRequestBody")
                 return jsonRequestBody.toString().toByteArray()
+            }
+
+            override fun getHeaders(): MutableMap<String, String>? {
+                val params: HashMap<String, String> = HashMap()
+                params["token"] = SessionData.token
+                return params
             }
         }
         VolleySingleton.getInstance(this).addToRequestQueue(request)
@@ -207,6 +213,12 @@ class PlaceDetailActivity : AppCompatActivity() {
                 Log.i(Constants.TAG, "PATCH /places/$placeId JSON: $jsonRequestBody")
                 return jsonRequestBody.toString().toByteArray()
             }
+
+            override fun getHeaders(): MutableMap<String, String>? {
+                val params: HashMap<String, String> = HashMap()
+                params["token"] = SessionData.token
+                return params
+            }
         }
         VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
@@ -252,7 +264,13 @@ class PlaceDetailActivity : AppCompatActivity() {
                     }
                 }, Response.ErrorListener {
                     Log.i(Constants.TAG, "API call GET /places/{id} failed")
-                }) {}
+                }) {
+                override fun getHeaders(): MutableMap<String, String>? {
+                    val params: HashMap<String, String> = HashMap()
+                    params["token"] = SessionData.token
+                    return params
+                }
+            }
             VolleySingleton.getInstance(this).addToRequestQueue(request)
         } catch (ex: Exception) {
 
@@ -289,7 +307,13 @@ class PlaceDetailActivity : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                 }, Response.ErrorListener { _ ->
                     Log.i(Constants.TAG, "API call GET /places/{id}/comments failed")
-                }) {}
+                }) {
+                override fun getHeaders(): MutableMap<String, String>? {
+                    val params: HashMap<String, String> = HashMap()
+                    params["token"] = SessionData.token
+                    return params
+                }
+            }
             VolleySingleton.getInstance(this).addToRequestQueue(request)
         } catch (ex: Exception) {
 
@@ -349,6 +373,12 @@ class PlaceDetailActivity : AppCompatActivity() {
 
                 Log.i(Constants.TAG, "POST /comments JSON: $jsonRequestBody")
                 return jsonRequestBody.toString().toByteArray()
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                val params: HashMap<String, String> = HashMap()
+                params["token"] = SessionData.token
+                return params
             }
         }
         VolleySingleton.getInstance(this).addToRequestQueue(request)

@@ -31,12 +31,14 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import java.lang.Exception
+import java.util.stream.Collectors
 
 class MainActivity : AppCompatActivity() {
 
     private val RECORD_REQUEST_CODE = 101
 
     private val placeList = mutableListOf<Place>()
+    private val placeListMarker = mutableListOf<Marker>()
     private val adapter = PlaceAdapter(placeList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,7 +150,7 @@ class MainActivity : AppCompatActivity() {
     var currentLat: String = ""
 
     var currentLon: String = ""
-    var locationCallback = object : LocationCallback() {
+    private var locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             for (it in locationResult.locations) {
                 if (currentLat != "%.4f".format(it.latitude) || currentLon != "%.4f".format(
@@ -201,7 +203,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }) {
-            override fun getHeaders():  MutableMap<String, String>{
+            override fun getHeaders(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["token"] = SessionData.token
                 return params
@@ -247,7 +249,13 @@ class MainActivity : AppCompatActivity() {
                     drawPlaceMarker()
                 }, Response.ErrorListener { _ ->
                     Log.i(Constants.TAG, "API call GET /places failed")
-                }) {}
+                }) {
+                override fun getHeaders(): MutableMap<String, String>? {
+                    val params: HashMap<String, String> = HashMap()
+                    params["token"] = SessionData.token
+                    return params
+                }
+            }
             VolleySingleton.getInstance(this).addToRequestQueue(request)
         } catch (ex: Exception) {
 
@@ -255,9 +263,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun drawPlaceMarker() {
-        //draw all places
+        //remove the old ones
+        for (marker in placeListMarker){
+            map!!.overlays.remove(marker)
+        }
+        placeListMarker.clear()
+        //draw all places and add to list
         for (place in placeList) {
             val marker = Marker(map!!)
+            placeListMarker.add(marker)
             marker.position = GeoPoint(
                 place.latitude,
                 place.longitude

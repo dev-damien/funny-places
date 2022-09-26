@@ -115,11 +115,11 @@ class CommentAdapter(
                     Toast.LENGTH_SHORT
                 ).show()
             }) {
-//            override fun getHeaders(): MutableMap<String, String>? {
-//                val params: HashMap<String, String> = HashMap()
-//                params["password"] = password
-//                return params
-//            }
+            override fun getHeaders(): MutableMap<String, String>? {
+                val params: HashMap<String, String> = HashMap()
+                params["token"] = SessionData.token
+                return params
+            }
         }
         VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
@@ -146,6 +146,12 @@ class CommentAdapter(
                 val jsonRequestBody = JSONObject(params as Map<*, *>?)
                 Log.i(Constants.TAG, "PATCH /comments/$id JSON: $jsonRequestBody")
                 return jsonRequestBody.toString().toByteArray()
+            }
+
+            override fun getHeaders(): MutableMap<String, String>? {
+                val params: HashMap<String, String> = HashMap()
+                params["token"] = SessionData.token
+                return params
             }
         }
         VolleySingleton.getInstance(context).addToRequestQueue(request)

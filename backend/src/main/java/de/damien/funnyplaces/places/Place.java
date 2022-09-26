@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,18 +37,18 @@ public class Place {
     @ManyToOne()
     @JoinColumn(name = "creator", nullable = false)
     @JsonIgnoreProperties(value = {"password", "createdPlaces", "comments"})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Account creator;
     private Double latitude;
     private Double longitude;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.REMOVE) // MERGE before
     @JoinColumn(name = "image_id")
     @JsonIgnoreProperties(value = {"name", "type", "place", "imageData"})
     private Image image;
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "place", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnoreProperties(value = {"place"})
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private List<Comment> comments;
 
 }

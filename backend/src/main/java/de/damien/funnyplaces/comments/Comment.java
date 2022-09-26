@@ -6,6 +6,8 @@ import de.damien.funnyplaces.places.Place;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -33,8 +35,9 @@ public class Comment {
     private Account writer;
 
     @ManyToOne
-    @JoinColumn(name = "place_id", nullable = false)
+    @JoinColumn(name = "mapped_place", nullable = false)
     @JsonIgnoreProperties(value = {"title", "description",
             "creator", "latitude", "longitude", "image", "comments"})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Place place;
 }

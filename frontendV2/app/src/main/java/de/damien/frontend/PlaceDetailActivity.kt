@@ -46,15 +46,15 @@ class PlaceDetailActivity : AppCompatActivity() {
         rvPlaceComments.layoutManager = LinearLayoutManager(this)
 
         buPlaceDetailAddComment.setOnClickListener {
-            showDialog()
+            showDialogAddComment()
         }
 
         ivPlaceDetailTitleEdit.setOnClickListener {
-            editTitle()
+            showDialogEditTitle()
         }
 
         ivPlaceDetailDescEdit.setOnClickListener {
-            editDesc()
+            showDialogEditDesc()
         }
 
         getPlace()
@@ -70,7 +70,7 @@ class PlaceDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun editTitle() {
+    private fun showDialogEditTitle() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setTitle("Edit your Title")
         val input = EditText(this)
@@ -86,7 +86,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 Toast.makeText(this, "You have to enter something", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Title has been changed", Toast.LENGTH_SHORT).show()
-                patchTitle(textInput)
+                editTitle(textInput)
             }
         }
         builder.setNegativeButton("Cancel") { dialog, which ->
@@ -95,7 +95,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun patchTitle(title: String) {
+    private fun editTitle(title: String) {
         Log.i(Constants.TAG, "try to edit title of place with id: $placeId")
         val url = Constants.SERVER_URL + "/places/$placeId"
         val request = object : StringRequest(
@@ -123,7 +123,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
 
-    private fun editDesc() {
+    private fun showDialogEditDesc() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setTitle("Edit your Description")
         val input = EditText(this)
@@ -139,7 +139,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 Toast.makeText(this, "You have to enter something", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Description has been changed", Toast.LENGTH_SHORT).show()
-                patchDescription(textInput)
+                editDesc(textInput)
             }
         }
         builder.setNegativeButton("Cancel") { dialog, which ->
@@ -148,7 +148,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun patchDescription(desc: String) {
+    private fun editDesc(desc: String) {
         Log.i(Constants.TAG, "try to edit description of place with id: $placeId")
         val url = Constants.SERVER_URL + "/places/$placeId"
         val request = object : StringRequest(
@@ -260,7 +260,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun showDialog() {
+    private fun showDialogAddComment() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setTitle("Add a Comment")
         val input = EditText(this)

@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
 
     private var map: MapView? = null
 
-    fun initMap() {
+    private fun initMap() {
         Log.i("MYTEST", "initializing the map")
         Configuration.getInstance().userAgentValue = applicationContext.packageName
         map = findViewById(R.id.map)

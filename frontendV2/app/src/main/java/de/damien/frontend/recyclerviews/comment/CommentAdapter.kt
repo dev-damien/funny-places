@@ -79,8 +79,11 @@ class CommentAdapter(
                             editComment(id, textInput)
                         }
                     }
-                    builder.setNegativeButton("Cancel") { dialog, which ->
+                    builder.setNeutralButton("Cancel") { dialog, which ->
                         dialog.cancel()
+                    }
+                    builder.setNegativeButton("Delete") { display, _ ->
+                        deleteComment(id)
                     }
                     builder.show()
 
@@ -88,6 +91,37 @@ class CommentAdapter(
 
             }
         }
+    }
+
+    private fun deleteComment(id: String) {
+        Log.i(Constants.TAG, "try to delete comment with id=$id")
+        val url = Constants.SERVER_URL + "/comments/$id"
+        val request = object : StringRequest(
+            Method.DELETE,
+            url,
+            Response.Listener { response ->
+                Log.i(Constants.TAG, "DELETE /comments/$id response: $response")
+                Toast.makeText(
+                    context,
+                    "Comment has been deleted",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }, Response.ErrorListener { error ->
+                Log.e(Constants.TAG, "Something failed: $error")
+                error.printStackTrace()
+                Toast.makeText(
+                    context,
+                    "Error occurred",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }) {
+//            override fun getHeaders(): MutableMap<String, String>? {
+//                val params: HashMap<String, String> = HashMap()
+//                params["password"] = password
+//                return params
+//            }
+        }
+        VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
 
     private fun editComment(id: String, textInput: String) {

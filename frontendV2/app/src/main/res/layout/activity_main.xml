@@ -7,15 +7,27 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabCenterMapOnYou"
+        android:id="@+id/fabLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:clickable="true"
-        android:contentDescription="fab to center map on your current location"
+        android:contentDescription="fab to logout"
+        app:backgroundTint="#AA1010"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/map"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/actionModeCloseDrawable" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabCenterMapOnYou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:contentDescription="fab to center map on your current location"
+        app:layout_constraintEnd_toEndOf="@+id/fabAddPlace"
+        app:layout_constraintTop_toBottomOf="@+id/fabAddPlace"
         app:srcCompat="@drawable/person" />
 
     <org.osmdroid.views.MapView

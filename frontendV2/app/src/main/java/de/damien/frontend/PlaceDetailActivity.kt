@@ -236,7 +236,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 null,
                 Response.Listener { response ->
                     commentList.clear()
-                    Log.i(Constants.TAG, "API call to get all comments by placeId: $response")
+                    //Log.i(Constants.TAG, "API call to get all comments by placeId: $response")
                     for (i in 0 until response.length()) {
                         curComment = response.getJSONObject(i)
                         curCreator = curComment.getJSONObject("writer")
@@ -249,7 +249,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                             )
                         )
                     }
-                    Log.i(Constants.TAG, commentList.toString())
+                    //Log.i(Constants.TAG, commentList.toString())
                     adapter.notifyDataSetChanged()
                 }, Response.ErrorListener { _ ->
                     Log.i(Constants.TAG, "API call GET /places/{id}/comments failed")

@@ -12,11 +12,14 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.StringRequest
 import com.google.android.gms.location.*
 import de.damien.frontend.recyclerviews.place.Place
 import de.damien.frontend.recyclerviews.place.PlaceAdapter
@@ -76,6 +79,9 @@ class MainActivity : AppCompatActivity() {
             SessionData.mapLat = currentLat.toDouble()
             SessionData.mapLon = currentLon.toDouble()
         }
+        fabLogout.setOnClickListener {
+            logout()
+        }
 
         if (SessionData.token.isBlank()) {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -117,6 +123,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var map: MapView? = null
+
     fun initMap() {
         Log.i("MYTEST", "initializing the map")
         Configuration.getInstance().userAgentValue = applicationContext.packageName
@@ -140,8 +147,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     var currentLat: String = ""
-    var currentLon: String = ""
 
+    var currentLon: String = ""
     var locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             for (it in locationResult.locations) {
@@ -164,10 +171,44 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     fun updateMapPosition(myPos: GeoPoint) {
         map!!.controller.setCenter(myPos)
         map!!.controller.setZoom(19.0)
+    }
+
+
+    private fun logout() {
+        Log.i(Constants.TAG, "Try to logout: user=${SessionData.name}, token=${SessionData.token}")
+        val url = Constants.SERVER_URL + "/logout"
+        //String Request initialized
+        val request = object : StringRequest(
+            Method.POST,
+            url,
+            Response.Listener { response ->
+                Toast.makeText(
+                    applicationContext,
+                    "Logged Out Successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
+                Log.i(Constants.TAG, "user logged out: $response")
+                SessionData.token = ""
+                SessionData.name = ""
+                startActivity(Intent(this, LoginActivity::class.java))
+
+            }, Response.ErrorListener { error ->
+                Toast.makeText(
+                    applicationContext,
+                    "Logout failed",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }) {
+            override fun getHeaders():  MutableMap<String, String>{
+                val params = HashMap<String, String>()
+                params["token"] = SessionData.token
+                return params
+            }
+        }
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
 
     private fun getPlaces() {
@@ -184,7 +225,7 @@ class MainActivity : AppCompatActivity() {
                 null,
                 Response.Listener { response ->
                     placeList.clear()
-                    Log.i(Constants.TAG, "API call to get all places received: $response")
+                    //Log.i(Constants.TAG, "API call to get all places received: $response")
                     for (i in 0 until response.length()) {
                         curPlace = response.getJSONObject(i)
                         curCreator = curPlace.getJSONObject("creator")
@@ -202,7 +243,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         )
                     }
-                    Log.i(Constants.TAG, placeList.toString())
+                    //Log.i(Constants.TAG, placeList.toString())
                     adapter.notifyDataSetChanged()
                     drawPlaceMarker()
                 }, Response.ErrorListener { _ ->

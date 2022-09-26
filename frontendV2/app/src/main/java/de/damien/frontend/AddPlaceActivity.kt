@@ -76,7 +76,7 @@ class AddPlaceActivity : AppCompatActivity() {
             }
             //all attributes are set
             title = etAddPlaceTitleInput.text.toString()
-            description = etAddPlaceDescInput.text.toString()
+            description = etAddPlaceDescInput.text.toString().trim()
             try {
                 lat = etAddPlaceLatInput.text.toString().toDouble()
                 lon = etAddPlaceLonInput.text.toString().toDouble()

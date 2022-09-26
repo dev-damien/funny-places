@@ -186,4 +186,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
+    <ImageView
+        android:id="@+id/ivPlaceDetailDeletePlace"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#9A1616"
+        android:backgroundTint="#A81F1F"
+        android:contentDescription="image click to delete"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_delete"
+        app:tint="@color/black" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

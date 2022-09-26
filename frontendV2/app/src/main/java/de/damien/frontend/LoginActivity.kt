@@ -137,13 +137,13 @@ class LoginActivity : AppCompatActivity() {
     private fun delete() {
         val name = etName.text.toString()
         val password = etPassword.text.toString()
-        Log.i(Constants.TAG, "try to delete account with name: $name")
+        Log.i(Constants.TAG, "try to delete account with name=$name, password=$password")
         val url = Constants.SERVER_URL + "/accounts/$name"
         val request = object : StringRequest(
             Method.DELETE,
             url,
             Response.Listener { response ->
-                Log.i(Constants.TAG, "DELETE /accounts response: $response")
+                Log.i(Constants.TAG, "DELETE /accounts/$name response: $response")
                 Toast.makeText(
                     applicationContext,
                     "Account has been deleted",

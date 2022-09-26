@@ -56,6 +56,9 @@ class PlaceDetailActivity : AppCompatActivity() {
         ivPlaceDetailDescEdit.setOnClickListener {
             showDialogEditDesc()
         }
+        ivPlaceDetailDeletePlace.setOnClickListener {
+            deletePlace()
+        }
 
         getPlace()
 
@@ -68,6 +71,38 @@ class PlaceDetailActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun deletePlace() {
+        Log.i(Constants.TAG, "try to delete place with id=$placeId")
+        val url = Constants.SERVER_URL + "/places/$placeId"
+        val request = object : StringRequest(
+            Method.DELETE,
+            url,
+            Response.Listener { response ->
+                Log.i(Constants.TAG, "DELETE /places/$placeId response: $response")
+                Toast.makeText(
+                    applicationContext,
+                    "Place has been deleted",
+                    Toast.LENGTH_SHORT
+                ).show()
+                finish()
+            }, Response.ErrorListener { error ->
+                Log.e(Constants.TAG, "Something failed: $error")
+                error.printStackTrace()
+                Toast.makeText(
+                    applicationContext,
+                    "Error occurred",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }) {
+//            override fun getHeaders(): MutableMap<String, String>? {
+//                val params: HashMap<String, String> = HashMap()
+//                params["password"] = password
+//                return params
+//            }
+        }
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
 
     private fun showDialogEditTitle() {
@@ -212,6 +247,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                     if (place!!.creator == SessionData.name) {
                         ivPlaceDetailTitleEdit.visibility = View.VISIBLE
                         ivPlaceDetailDescEdit.visibility = View.VISIBLE
+                        ivPlaceDetailDeletePlace.visibility = View.VISIBLE
                         //ivPlaceDetailImageEdit.visibility = View.VISIBLE
                     }
                 }, Response.ErrorListener {

@@ -16,7 +16,7 @@ public class AccountService {
     /**
      * contains tuples that map a token to a specific user
      */
-    private static final HashMap<String, String> tokens = new HashMap<String, String>();
+    private static final HashMap<String, String> tokens = new HashMap<>();
     /**
      * repository for the database-connection
      */
@@ -70,6 +70,7 @@ public class AccountService {
      * @throws AuthenticationException if user does not exist or password is wrong
      */
     public String login(Account account) throws AuthenticationException {
+        var test = tokens;
         System.out.println("LOGIN: received data " + account);
         Account existing = getAccountByName(account.getName());
         if (existing == null) {

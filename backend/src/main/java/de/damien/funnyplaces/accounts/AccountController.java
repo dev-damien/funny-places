@@ -39,7 +39,7 @@ public class AccountController {
     }
 
     @PostMapping("/logout")
-    public String logout(@RequestParam String token) throws ResponseStatusException {
+    public String logout(@RequestHeader("token") String token) throws ResponseStatusException {
         try {
             return accountService.logout(token);
         } catch (AuthenticationException ex) {

@@ -105,7 +105,7 @@ class AddPlaceActivity : AppCompatActivity() {
                 Toast.makeText(this, "Place \"$title\" has been added", Toast.LENGTH_LONG).show()
                 finish()
             }, Response.ErrorListener { error ->
-
+                Log.i(Constants.TAG, "POST /places threw error")
             }) {
             override fun getBodyContentType(): String {
                 return "application/json"

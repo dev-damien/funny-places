@@ -7,7 +7,6 @@ import android.os.Looper
 import android.text.InputType
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
-import android.util.Size
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -119,7 +118,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }) {
-            override fun getHeaders(): MutableMap<String, String>? {
+            override fun getHeaders(): MutableMap<String, String> {
                 val params: HashMap<String, String> = HashMap()
                 params["token"] = SessionData.token
                 return params
@@ -147,7 +146,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 editTitle(textInput)
             }
         }
-        builder.setNegativeButton("Cancel") { dialog, which ->
+        builder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.cancel()
         }
         builder.show()
@@ -178,7 +177,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 return jsonRequestBody.toString().toByteArray()
             }
 
-            override fun getHeaders(): MutableMap<String, String>? {
+            override fun getHeaders(): MutableMap<String, String> {
                 val params: HashMap<String, String> = HashMap()
                 params["token"] = SessionData.token
                 return params
@@ -206,7 +205,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 editDesc(textInput)
             }
         }
-        builder.setNegativeButton("Cancel") { dialog, which ->
+        builder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.cancel()
         }
         builder.show()
@@ -237,7 +236,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 return jsonRequestBody.toString().toByteArray()
             }
 
-            override fun getHeaders(): MutableMap<String, String>? {
+            override fun getHeaders(): MutableMap<String, String> {
                 val params: HashMap<String, String> = HashMap()
                 params["token"] = SessionData.token
                 return params
@@ -288,7 +287,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 }, Response.ErrorListener {
                     Log.i(Constants.TAG, "API call GET /places/{id} failed")
                 }) {
-                override fun getHeaders(): MutableMap<String, String>? {
+                override fun getHeaders(): MutableMap<String, String> {
                     val params: HashMap<String, String> = HashMap()
                     params["token"] = SessionData.token
                     return params
@@ -328,10 +327,10 @@ class PlaceDetailActivity : AppCompatActivity() {
                     }
                     //Log.i(Constants.TAG, commentList.toString())
                     adapter.notifyDataSetChanged()
-                }, Response.ErrorListener { _ ->
+                }, Response.ErrorListener {
                     Log.i(Constants.TAG, "API call GET /places/{id}/comments failed")
                 }) {
-                override fun getHeaders(): MutableMap<String, String>? {
+                override fun getHeaders(): MutableMap<String, String> {
                     val params: HashMap<String, String> = HashMap()
                     params["token"] = SessionData.token
                     return params
@@ -361,7 +360,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 addComment(textInput)
             }
         }
-        builder.setNegativeButton("Cancel") { dialog, which ->
+        builder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.cancel()
         }
         builder.show()

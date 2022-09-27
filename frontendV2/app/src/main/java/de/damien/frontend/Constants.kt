@@ -8,4 +8,6 @@ object Constants {
 
     const val PULL_DELAY = 10000L
 
+    const val DISTANCE_TO_COMMENT = 25
+
 }

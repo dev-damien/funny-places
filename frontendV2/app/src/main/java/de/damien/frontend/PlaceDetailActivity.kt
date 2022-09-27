@@ -7,8 +7,10 @@ import android.os.Looper
 import android.text.InputType
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.util.Size
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +25,7 @@ import de.damien.frontend.recyclerviews.comment.CommentAdapter
 import de.damien.frontend.recyclerviews.place.Place
 import kotlinx.android.synthetic.main.activity_place_detail.*
 import org.json.JSONObject
+import org.osmdroid.util.GeoPoint
 
 class PlaceDetailActivity : AppCompatActivity() {
 
@@ -46,7 +49,11 @@ class PlaceDetailActivity : AppCompatActivity() {
         rvPlaceComments.layoutManager = LinearLayoutManager(this)
 
         buPlaceDetailAddComment.setOnClickListener {
-            showDialogAddComment()
+            if (isUserInRange()) {
+                showDialogAddComment()
+            } else {
+                Toast.makeText(this, "You are too far away", Toast.LENGTH_SHORT).show()
+            }
         }
 
         ivPlaceDetailTitleEdit.setOnClickListener {
@@ -58,6 +65,9 @@ class PlaceDetailActivity : AppCompatActivity() {
         }
         ivPlaceDetailDeletePlace.setOnClickListener {
             deletePlace()
+        }
+        ivPlaceDetailAddCommentInfo.setOnClickListener {
+            showDialogAddCommentInfo()
         }
 
         getPlace()
@@ -71,6 +81,19 @@ class PlaceDetailActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun isUserInRange(): Boolean {
+        val userPosition = GeoPoint(
+            SessionData.latitude,
+            SessionData.longitude
+        )
+        val placePosition = GeoPoint(
+            place!!.latitude,
+            place!!.longitude
+        )
+        val distance = userPosition.distanceToAsDouble(placePosition)
+        return distance < Constants.DISTANCE_TO_COMMENT
     }
 
     private fun deletePlace() {
@@ -382,5 +405,23 @@ class PlaceDetailActivity : AppCompatActivity() {
             }
         }
         VolleySingleton.getInstance(this).addToRequestQueue(request)
+    }
+
+    private fun showDialogAddCommentInfo() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("When can I add a Comment?")
+        val infoText = TextView(this)
+        infoText.isSingleLine = false
+        infoText.setPadding(10, 3, 10, 3)
+        infoText.textSize = 16.0f
+        infoText.text =
+            "In order to comment on a place, you are required to be within a ${Constants.DISTANCE_TO_COMMENT}m radius of it.\n" +
+                    "Go outside and try it ;)"
+        builder.setView(infoText)
+
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
     }
 }

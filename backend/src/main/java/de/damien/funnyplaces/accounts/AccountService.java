@@ -43,7 +43,9 @@ public class AccountService {
      *         false otherwise
      */
     public static boolean authenticateUser(String userName, String token) {
-        return getAccountByToken(token).equals(userName);
+        String userNameTmp = getAccountByToken(token);
+        if (userNameTmp == null) return false;
+        return userNameTmp.equals(userName);
     }
 
     /**

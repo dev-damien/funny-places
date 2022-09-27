@@ -22,6 +22,7 @@ public class ImageService {
     }
 
     public Long uploadImage(MultipartFile file, String token) throws IOException, AuthenticationException {
+        System.out.println("Image upload with token=" + token);
         if (AccountService.getAccountByToken(token) == null) {
             throw new AuthenticationException("Invalid token");
         }

@@ -39,4 +39,9 @@ public class Image {
     @Column(length = 1024)
     private byte[] imageData;
 
+    public Image(Long id) {
+        super();
+        this.imageId = id;
+    }
+
 }

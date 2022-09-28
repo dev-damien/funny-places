@@ -58,4 +58,9 @@ public class AccountController {
         }
     }
 
+    @GetMapping("/status")
+    public String status() {
+        return "Server is up";
+    }
+
 }

@@ -34,10 +34,7 @@ public class ImageService {
         return image.getImageId();
     }
 
-    public byte[] downloadImage(Long fileId, String token) throws NoSuchFileException, AuthenticationException {
-        if (AccountService.getAccountByToken(token) == null) {
-            throw new AuthenticationException("Invalid token");
-        }
+    public byte[] downloadImage(Long fileId) throws NoSuchFileException, AuthenticationException {
         Optional<Image> imageOptional = imageRepository.findById(fileId);
         if (imageOptional.isEmpty()) {
             throw new NoSuchFileException("");
